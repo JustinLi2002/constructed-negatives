@@ -5,10 +5,6 @@ Code for the paper of the same name, which spins out of
 sampling determines the sign of protein-level feature contributions in
 modification site prediction*).
 
-**`HANDOVER_identification.md`, in this repository, is the working process
-log, not part of the submission.** It is kept here for continuity between
-work sessions and is not required to reproduce any result below.
-
 ## The claim
 
 A benchmark that draws negatives only from entities carrying at least `T`
@@ -75,10 +71,6 @@ produced — is self-contained in this repository.
 | `threshold_tradeoff.py` | The donor-threshold cost/benefit trade on one axis: `W_un(T)` against the expected false-negative rate `FN(T)`. Backs the "what the threshold was buying" figure. | `ptm-audit` rebuilt data |
 | `make_figures.py` | All main and Extended Data figures, drawn only from `results_*.txt` already in this repository (the small numbers embedded at the top of the script are transcribed from those files and named there, so they can be checked rather than trusted). | nothing external once the `results_*.txt` files exist |
 | `reversal_bound.py` | Not run standalone for its own named result; imported by `shift_check.py` for the split-effect identity. Kept for that reproducibility path. | nothing external |
-
-`check_consistency.py` and `build_docx.js` are manuscript tooling, not
-analysis code, and are documented in `HANDOVER_identification.md` rather than
-here.
 
 ## Quick start
 
