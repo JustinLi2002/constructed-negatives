@@ -1,0 +1,51 @@
+identification_bound.py -- 20 seeds x 2500 entities per cell, mlp
+
+the bound, as it stands
+  T  w_unob    bench    truth |    naive  holds |  cond lo  cond hi  holds   slope |  viol n_obs
+------------------------------------------------------------------------------------------------
+  0    0.00   +0.020   +0.020 |   +0.020   100% |   +0.020   +0.020   100%  +0.000 |  0.18   7.0
+  2    0.14   +0.012   +0.021 |   +0.018     5% |   +0.018   +0.023    65%  -0.048 |  0.11   5.0
+  5    0.42   -0.005   +0.008 |   -0.001     5% |   -0.001   +0.013    50%  -0.030 |  0.04   3.0
+ 10    0.73   -0.044   -0.052 |   -0.046    50% |   -0.077   -0.040    45%  +0.027 |  0.00   2.0
+ 20    0.94   -0.106   -0.158 |   -0.106    80% |   -0.951   +0.939   100%      -- |  0.00   1.0
+------------------------------------------------------------------------------------------------
+
+how the unobserved region is filled in: endpoint, observed trend continued,
+observed curvature continued.  holds = share of replicates where the estimate is
+an upper bound on the truth; err = mean |estimate - truth|.
+  T    truth |     flat  holds    err |   linear  holds    err | quadratic  holds    err |    curv
+--------------------------------------------------------------------------------------------------
+  0   +0.020 |   +0.020   100%  0.000 |   +0.020   100%  0.000 |   +0.020   100%  0.000 |  +0.000
+  2   +0.021 |   +0.018     5%  0.004 |   +0.023    90%  0.003 |   +0.021    40%  0.004 |  -0.006
+  5   +0.008 |   -0.001     5%  0.009 |   +0.012    55%  0.008 |   +0.016    70%  0.021 |  +0.005
+ 10   -0.052 |   -0.046    50%  0.010 |   -0.071    25%  0.036 |       --     0%     -- |      --
+ 20   -0.158 |   -0.106    80%  0.073 |       --     0%     -- |       --     0%     -- |      --
+--------------------------------------------------------------------------------------------------
+
+max decomposition residual over all cells: 2.36e-16
+
+  T = 2, seed 0
+   stratum     w_k  delta_k true  delta_k obs  status
+         0   0.051       +0.0926           --  UNOBSERVED
+         1   0.076       +0.0576           --  UNOBSERVED
+         2   0.087       +0.0667      +0.0667  observed
+       3-4   0.190       +0.0309      +0.0309  observed
+       5-9   0.348       +0.0069      +0.0069  observed
+     10-19   0.184       -0.0043      -0.0043  observed
+       20+   0.065       -0.0197      -0.0197  observed
+  benchmark reads +0.0137   truth +0.0211
+  naive upper +0.0204   cond [+0.0204, +0.0235]   slope -0.0359
+  decomposition residual 3.47e-18
+
+  T = 10, seed 0
+   stratum     w_k  delta_k true  delta_k obs  status
+         0   0.051       -0.0591           --  UNOBSERVED
+         1   0.076       -0.0126           --  UNOBSERVED
+         2   0.087       -0.0413           --  UNOBSERVED
+       3-4   0.190       -0.0551           --  UNOBSERVED
+       5-9   0.348       -0.0514           --  UNOBSERVED
+     10-19   0.184       -0.0631      -0.0631  observed
+       20+   0.065       -0.0340      -0.0340  observed
+  benchmark reads -0.0555   truth -0.0497
+  naive upper -0.0612   cond [-0.1034, -0.0612]   slope +0.0493
+  decomposition residual 1.39e-17

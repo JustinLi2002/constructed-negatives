@@ -1,0 +1,55 @@
+Pairwise method orderings on the first paper's eight tasks.
+
+gap        = |AUROC_A - AUROC_B| on the benchmark, mean over 10 seeds
+gap needed = W_un / (1 - W_un), the smallest gap whose ordering is
+             identified; above 1 no gap qualifies, since a difference
+             of AUROCs cannot exceed 1
+
+task                      W_un     gaps median gap   gap needed   ident.
+------------------------------------------------------------------------
+Phosphorylation S/T      0.605        3     0.0165         1.53     0/3
+Phosphorylation Y        0.642        3     0.0532         1.79     0/3
+Acetylation K            0.921        6     0.0578        11.66     0/6
+Methylation K/R          0.974        6     0.0378        37.46     0/6
+Methylation R            0.977        6     0.0534        42.48     0/6
+Sumoylation K            0.913        6     0.0667        10.49     0/6
+Ubiquitination K         0.750        6     0.0497         3.00     0/6
+N-Glycosylation N        0.977        6     0.0100        42.48     0/6
+------------------------------------------------------------------------
+orderings whose direction is identified: 0 of 42
+largest gap anywhere in the table: 0.0727 (Sumoylation K)
+
+Every task needs a gap above 1.5 AUROC -- an impossibility -- for any
+ordering to be identified, because every task has more than half its
+deployment negatives missing.  The comparison that would qualify does not
+exist: a perfect ranker against a random one gaps by 0.5.
+
+Same question in the restricted universe, the most generous reading:
+task                   W_un res   gap needed
+--------------------------------------------
+Phosphorylation S/T      0.472         0.89
+Phosphorylation Y        0.244         0.32
+Acetylation K            0.817         4.46
+Methylation K/R          0.936        14.63
+Methylation R            0.915        10.76
+Sumoylation K            0.779         3.52
+Ubiquitination K         0.612         1.58
+N-Glycosylation N        0.889         8.01
+--------------------------------------------
+Phosphorylation Y is the only task where the required gap falls below 1,
+and it needs 0.32 AUROC -- larger than any gap in the literature.
+
+The same criterion on a published head-to-head comparison.
+
+task                   comparison                                    gap   needed  short by
+------------------------------------------------------------------------------------------
+Phosphorylation S/T    DeepMVP 0.95 vs MusiteDeep 0.83              0.12     1.53     12.8x
+                         (restricted universe)                      0.12     0.89      7.4x
+                         source: Fig. 3, independent test set
+Phosphorylation S/T    DeepMVP 0.95 vs MusiteDeep retrained 0.89    0.06     1.53     25.5x
+                         (restricted universe)                      0.06     0.89     14.9x
+                         source: Extended Data Fig. 5a
+------------------------------------------------------------------------------------------
+Neither ordering is identified, in either universe, and neither is
+close.  These are the comparisons the field's flagship tool leads
+with, in the journal that published it.

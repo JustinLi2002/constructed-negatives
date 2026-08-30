@@ -1,0 +1,52 @@
+########## augmented channel = ppi
+the assumption-free reversal guarantee on the first paper's eight tasks
+
+delta_O   = ppi minus baseline, the benchmark's own reading
+threshold = delta_O / (delta_O + 1), the largest unobserved weight
+            that still forbids a sign reversal, assuming nothing
+W_un      = share of deployment negatives the benchmark supplies nothing for
+
+task                     delta_O  threshold | W_un dep   margin | W_un res   margin
+------------------------------------------------------------------------------------
+Phosphorylation S/T      +0.0165     0.0162 |    0.605      37x |    0.472      29x
+Phosphorylation Y        +0.0532     0.0505 |    0.642      13x |    0.244       5x
+Acetylation K            +0.0578     0.0546 |    0.921      17x |    0.817      15x
+Methylation K/R          +0.0378     0.0364 |    0.974      27x |    0.936      26x
+Methylation R            +0.0534     0.0507 |    0.977      19x |    0.915      18x
+Sumoylation K            +0.0667     0.0626 |    0.913      15x |    0.779      12x
+Ubiquitination K         +0.0497     0.0473 |    0.750      16x |    0.612      13x
+N-Glycosylation N        +0.0100     0.0099 |    0.977      99x |    0.889      90x
+------------------------------------------------------------------------------------
+tasks where the guarantee fires: 0 of 8 in the deployment universe, 0 of 8 in the restricted one
+
+margin by which the deployment universe misses the guarantee: 13x to 99x
+
+So on real published tasks the free guarantee never fires, and not
+narrowly.  A shape restriction is not a refinement here; it is the only
+route to any statement about the deployment effect at all.
+########## augmented channel = kinase
+the assumption-free reversal guarantee on the first paper's eight tasks
+
+delta_O   = kinase minus baseline, the benchmark's own reading
+threshold = delta_O / (delta_O + 1), the largest unobserved weight
+            that still forbids a sign reversal, assuming nothing
+W_un      = share of deployment negatives the benchmark supplies nothing for
+
+task                     delta_O  threshold | W_un dep   margin | W_un res   margin
+------------------------------------------------------------------------------------
+Phosphorylation S/T      +0.0184     0.0181 |    0.605      33x |    0.472      26x
+Phosphorylation Y        +0.0687     0.0643 |    0.642      10x |    0.244       4x
+Acetylation K            +0.0662     0.0621 |    0.921      15x |    0.817      13x
+Methylation K/R          +0.0424     0.0406 |    0.974      24x |    0.936      23x
+Methylation R            +0.0620     0.0584 |    0.977      17x |    0.915      16x
+Sumoylation K            +0.0727     0.0677 |    0.913      13x |    0.779      12x
+Ubiquitination K         +0.0570     0.0540 |    0.750      14x |    0.612      11x
+N-Glycosylation N        +0.0120     0.0119 |    0.977      82x |    0.889      75x
+------------------------------------------------------------------------------------
+tasks where the guarantee fires: 0 of 8 in the deployment universe, 0 of 8 in the restricted one
+
+margin by which the deployment universe misses the guarantee: 10x to 82x
+
+So on real published tasks the free guarantee never fires, and not
+narrowly.  A shape restriction is not a refinement here; it is the only
+route to any statement about the deployment effect at all.

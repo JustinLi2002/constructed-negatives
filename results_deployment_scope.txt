@@ -1,0 +1,20 @@
+Smallest annotation depth d_min such that, over entities with depth
+>= d_min, the benchmark's unobserved weight falls to 0.5 or below.
+Threshold T = 10.
+
+task                  d_min        W % proteome |  d_min        W % proteome |  d_min        W % proteome
+                        (A) any gap, worst case |    (B) own gap, worst case |    (B) own gap, measured c
+------------------------------------------------------------------------------------------------------------
+Phospho S/T               1    0.475      66.1% |     10    0.000      26.2% |      0    0.605     100.0%
+Phospho Y                 2    0.453      57.7% |     10    0.000      26.7% |      0    0.642     100.0%
+Acetylation K             5    0.499      10.6% |     10    0.000       4.4% |      0    0.921     100.0%
+Methylation K/R           7    0.488       2.1% |     10    0.000       0.9% |      4    0.773       5.7%
+Methylation R             7    0.495       2.1% |     10    0.000       0.9% |      8    0.340       1.6%
+Sumoylation K             5    0.445      12.0% |     10    0.000       5.9% |      0    0.913     100.0%
+Ubiquitination K          3    0.481      41.5% |     10    0.000      18.4% |      0    0.750     100.0%
+N-Glyc N                  6    0.476       1.5% |     10    0.000       0.5% |      0    0.977     100.0%
+------------------------------------------------------------------------------
+
+d_min = T means the only population over which the guarantee is
+available is the donor pool itself -- the benchmark supports
+comparisons about the entities it sampled from and no others.

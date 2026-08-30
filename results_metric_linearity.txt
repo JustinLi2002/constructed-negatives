@@ -1,0 +1,19 @@
+Does the stratum decomposition hold for this metric?
+sum_k w_k m_k against m computed on all negatives together,
+positive set held fixed, 8 depth strata.
+
+task                    AUROC resid  AUPRC resid  AUPRC value  resid/value
+--------------------------------------------------------------------------
+phosphorylation_st         0.00e+00     2.75e-01       0.6155        44.7%
+phosphorylation_y          1.11e-16     2.77e-01       0.4516        61.4%
+acetylation_k              0.00e+00     3.57e-01       0.4120        86.7%
+methylation_k              0.00e+00     3.15e-01       0.3764        83.6%
+methylation_r              0.00e+00     2.97e-01       0.4138        71.9%
+sumoylation_k              1.11e-16     3.63e-01       0.4058        89.5%
+ubiquitination_k           2.22e-16     3.57e-01       0.4910        72.6%
+glycosylation_n            1.11e-16     1.73e-01       0.7454        23.2%
+--------------------------------------------------------------------------
+AUROC residual max 2.2e-16 -- the decomposition is exact.
+AUPRC residual 0.173 to 0.363, 23% to 90% of the value it is
+meant to reconstruct -- the decomposition does not hold, and
+nothing built on it transfers.

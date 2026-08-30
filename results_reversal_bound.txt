@@ -1,0 +1,25 @@
+identity + corollary, STRING physical >=700, 3 seeds
+
+  frac    W_un     r2 |  delta_O delta_bar   deploy |  identity threshold | verdict
+--------------------------------------------------------------------------------------------
+ 0.064   0.917   0.15 |  -0.0039   -0.0076  -0.0073 |  8.17e-17        -- | n/a (delta_O <= 0)
+ 0.064   0.917   0.30 |  +0.0151   +0.0193  +0.0189 |  8.07e-17     0.015 | reversal possible
+ 0.064   0.917   0.60 |  +0.0737   +0.0452  +0.0476 |  9.60e-17     0.069 | reversal possible
+ 0.064   0.917   0.90 |  +0.2444   -0.0819  -0.0546 |  3.70e-17     0.196 | reversal possible -- and it happened
+ 0.200   0.788   0.15 |  +0.0024   +0.0023  +0.0023 |  9.83e-17     0.002 | reversal possible
+ 0.200   0.788   0.30 |  +0.0269   +0.0329  +0.0315 |  7.69e-17     0.026 | reversal possible
+ 0.200   0.788   0.60 |  +0.0944   +0.0983  +0.0974 |  5.15e-17     0.086 | reversal possible
+ 0.200   0.788   0.90 |  +0.2139   +0.0293  +0.0685 |  2.78e-17     0.176 | reversal possible
+ 0.500   0.481   0.15 |  +0.0108   +0.0045  +0.0078 |  1.14e-16     0.011 | reversal possible
+ 0.500   0.481   0.30 |  +0.0447   +0.0334  +0.0393 |  7.02e-17     0.043 | reversal possible
+ 0.500   0.481   0.60 |  +0.1355   +0.1200  +0.1281 |  9.54e-17     0.119 | reversal possible
+ 0.500   0.481   0.90 |  +0.2120   +0.1615  +0.1877 |  9.14e-17     0.175 | reversal possible
+ 1.000   0.000   0.15 |  +0.0059      +nan  +0.0059 |       nan     0.006 | reversal IMPOSSIBLE
+ 1.000   0.000   0.30 |  +0.0341      +nan  +0.0341 |       nan     0.033 | reversal IMPOSSIBLE
+ 1.000   0.000   0.60 |  +0.1272      +nan  +0.1272 |       nan     0.113 | reversal IMPOSSIBLE
+ 1.000   0.000   0.90 |  +0.1985      +nan  +0.1985 |       nan     0.166 | reversal IMPOSSIBLE
+--------------------------------------------------------------------------------------------
+worst residual on identity (1): 1.14e-16
+cells where a reversal occurred despite the guarantee: 0
+
+[exited with code 0]
