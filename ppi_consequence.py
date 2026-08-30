@@ -261,7 +261,7 @@ if __name__ == '__main__':
               % ('frac', 'tau', 'r2', 'benchmark', 'deployment', 'w_unobs',
                  'flips'))
         print('-' * 70)
-        rec = []
+        rec, perseed = [], []
         for f in fracs:
             tf = config_threshold(deg, f) if f < 1.0 else int(deg.max()) ** 2
             for r2 in r2s:
@@ -273,6 +273,10 @@ if __name__ == '__main__':
                 for r in rs:
                     _, _, wu = decompose(r, deg)
                     wun.append(wu)
+                for r, wu in zip(rs, wun):
+                    flip = r['delta_bench'] > 0 > r['delta_deploy']
+                    perseed.append((f, tf, r2, r['seed'], r['delta_bench'],
+                                     r['delta_deploy'], wu, int(flip)))
                 db = float(np.mean([r['delta_bench'] for r in rs]))
                 dd = float(np.mean([r['delta_deploy'] for r in rs]))
                 fl = sum(1 for r in rs
@@ -289,6 +293,15 @@ if __name__ == '__main__':
             for r in rec:
                 fh.write(fmt % r)
         print('\nwritten: %s.tsv' % a.out)
+        ps_cols = ['prefilter_frac', 'tau', 'r2', 'seed', 'delta_bench',
+                   'delta_deploy', 'w_unobs', 'flip']
+        ps_fmt = '%.3f\t%d\t%.2f\t%d\t%.6f\t%.6f\t%.4f\t%d\n'
+        with open(a.out + '_perseed.tsv', 'w', encoding='utf-8') as fh:
+            fh.write('\t'.join(ps_cols) + '\n')
+            for r in perseed:
+                fh.write(ps_fmt % r)
+        print('written: %s_perseed.tsv (one row per seed, not just the '
+              'aggregate)' % a.out)
         raise SystemExit
 
     runs, last = [], None
