@@ -24,11 +24,11 @@ length exactly three.  No 156M-row pair list is ever materialised; it is one
 sparse boolean matrix cubed, blocked by rows to keep the dense intermediate
 small.
 
-What comes out, per protein: its degree, how many partners it may legally take,
-and therefore whether it is excluded outright.  Stratified by degree, that is
-the propensity of appearing as a negative -- the direct analogue of the donor
-threshold's propensity by annotation depth, and the quantity that decides which
-cell of the taxonomy this rule belongs in.
+Outputs describe marginal protein coverage: degree, eligible-partner count,
+and complete protein exclusion. The legacy column named "propensity" is the
+mean eligible-partner share with denominator n-1, not a pair's inclusion
+probability. Positive marginal coverage does not establish pair-level support;
+support_unit_audit.py reports excluded nonedge pairs separately.
 
     python cl3_exclusion.py edges.tsv --out huri
     python cl3_exclusion.py edges.tsv --col-a 0 --col-b 1 --header
@@ -177,8 +177,7 @@ def summarise(A, names, eligible, out_prefix):
     print('  proteins EXCLUDED outright   %10d  (%.1f%%)'
           % (int(excluded.sum()), 100 * excluded.mean()))
 
-    # the pair-mass version: hubs are a minority by count and a majority by pair
-    # mass, which is the unit the deployment universe is actually measured in
+    # positive-edge degree mass: distinct from candidate-negative pair mass
     share_of_pair_mass = deg.astype(float) / deg.sum()
     print('  share of degree carried by excluded proteins  %.3f'
           % share_of_pair_mass[excluded].sum())
@@ -203,8 +202,8 @@ def summarise(A, names, eligible, out_prefix):
     print('  ' + '-' * 54)
     print('\npropensity = mean share of all possible partners a protein of that'
           '\ndegree may legally take as a negative.  A stratum at exactly 0 is a'
-          '\npositivity violation; one that merely decays is a vanishing'
-          '\npropensity, which is a different cell of the taxonomy.')
+          '\nprotein-level exclusion; positive marginal eligibility does not establish'
+          '\nfull pair support. Check the evaluated unit separately.')
 
     with open(out_prefix + '_per_protein.tsv', 'w', encoding='utf-8') as fh:
         fh.write('protein\tdegree\tn_eligible\texcluded\n')

@@ -17,7 +17,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-OUT = "figures"
+OUT = os.environ.get("FIGURE_OUT", "figures")
+RESULT_DIR = os.environ.get("SCOPE_RESULT_DIR", ".")
 os.makedirs(OUT, exist_ok=True)
 plt.rcParams.update({"font.size": 7, "axes.linewidth": 0.6,
                      "xtick.major.width": 0.6, "ytick.major.width": 0.6,
@@ -27,44 +28,32 @@ plt.rcParams.update({"font.size": 7, "axes.linewidth": 0.6,
 TASKS = ["Phospho S/T", "Phospho Y", "Ubiquitination K", "Sumoylation K",
          "Acetylation K", "Methylation K/R", "Methylation R", "N-Glyc N"]
 
-# results_ptm_guarantee.txt / results_ranking_identification.txt
-W_DEPLOY = dict(zip(TASKS, [0.605, 0.642, 0.750, 0.913, 0.921, 0.974, 0.977,
-                            0.977]))
-DELTA_O_BENCH = dict(zip(TASKS, [0.0165, 0.0532, 0.0497, 0.0667, 0.0578,
-                                 0.0378, 0.0534, 0.0100]))
-# results_measured_c.txt  (esm2, train=replica, eval=rebuilt, T=10)
-MEASURED_C = {"Phospho S/T": 0.0000, "Phospho Y": 0.0258,
-              "Acetylation K": 0.0177, "Methylation K/R": 0.0474,
-              "Methylation R": 0.1374, "Sumoylation K": 0.0033,
-              "Ubiquitination K": 0.0134, "N-Glyc N": 0.0040}
-# results_deployment_scope.txt
-SCOPE = {"Phospho S/T": (1, 66.1), "Phospho Y": (2, 57.7),
-         "Ubiquitination K": (3, 41.5), "Sumoylation K": (5, 12.0),
-         "Acetylation K": (5, 10.6), "Methylation K/R": (7, 2.1),
-         "Methylation R": (7, 2.1), "N-Glyc N": (6, 1.5)}
-# (C) own gap under the measured c -- a different question from (A), so plotted
-# as a separate mark rather than a second bar
-SCOPE_MEAS = {"Phospho S/T": 100.0, "Phospho Y": 100.0,
-              "Ubiquitination K": 100.0, "Sumoylation K": 100.0,
-              "Acetylation K": 100.0, "Methylation K/R": 5.7,
-              "Methylation R": 1.6, "N-Glyc N": 100.0}
-# results_ptm_guarantee.txt, restricted ("seen") universe
-W_RESTRICT = {"Phospho S/T": 0.472, "Phospho Y": 0.244, "Acetylation K": 0.817,
-              "Methylation K/R": 0.936, "Methylation R": 0.915,
-              "Sumoylation K": 0.779, "Ubiquitination K": 0.612,
-              "N-Glyc N": 0.889}
+# Numeric inputs are read from the condition-checked reanalysis outputs.
+TASK_KEYS = dict(zip(TASKS, ["phosphorylation_st", "phosphorylation_y",
+    "ubiquitination_k", "sumoylation_k", "acetylation_k", "methylation_k",
+    "methylation_r", "glycosylation_n"]))
+with open(os.path.join(RESULT_DIR, "results_scope_review_summary.tsv"), encoding="utf-8") as fh:
+    REVIEW = {r["task"]: r for r in csv.DictReader(fh, delimiter="\t")}
+def value(task, column):
+    return float(REVIEW[TASK_KEYS[task]][column])
+W_DEPLOY = {t: value(t, "W_reference") for t in TASKS}
+DELTA_O_BENCH = {t: value(t, "delta_bench_legacy") for t in TASKS}
+SCOPE = {t: (int(value(t, "d_min_A")), value(t, "A_pct")) for t in TASKS}
+SCOPE_SCENARIO = {t: value(t, "B_scenario_pct") for t in TASKS}
 # results_shift_check.txt, r2 = 0.90, STRING physical >= 700
 # (W, unobserved-mass term, within-region shift term)
 SHIFT = [(0.4789, -0.0262, +0.0018), (0.7880, -0.1451, +0.0001),
          (0.9178, -0.2991, -0.0044)]
-# results_metric_linearity.txt
-PRC_RESID = {"Phospho S/T": (2.75e-1, 0.6155), "Phospho Y": (2.77e-1, 0.4516),
-             "Acetylation K": (3.57e-1, 0.4120),
-             "Methylation K/R": (3.15e-1, 0.3764),
-             "Methylation R": (2.97e-1, 0.4138),
-             "Sumoylation K": (3.63e-1, 0.4058),
-             "Ubiquitination K": (3.57e-1, 0.4910),
-             "N-Glyc N": (1.73e-1, 0.7454)}
+# Baseline-only metric diagnostic, with the same merged depth definition.
+PRC_RESID = {}
+with open(os.path.join(RESULT_DIR, "results_metric_review.txt"), encoding="utf-8") as fh:
+    for line in fh:
+        fields = line.split()
+        if fields and fields[0] in TASK_KEYS.values():
+            task = next(t for t, key in TASK_KEYS.items() if key == fields[0])
+            PRC_RESID[task] = (float(fields[2]), float(fields[3]))
+if set(PRC_RESID) != set(TASKS):
+    raise ValueError("Metric output does not cover all eight tasks")
 # results_threshold_tradeoff.txt, alpha = 0, mean over tasks
 TRADE_T = [0, 1, 2, 3, 5, 10, 20]
 TRADE_W = [0.000, 0.504, 0.613, 0.679, 0.757, 0.845, 0.916]
@@ -108,16 +97,14 @@ def figure1():
                    fontsize=6, color=CB[1], ha="center")
     ax[0].set_ylim(-0.03, 1.05)
     ax[0].set_xlabel("annotation depth")
-    ax[0].set_ylabel("propensity of being a negative")
+    ax[0].set_ylabel("negative-sampling probability")
     ax[0].set_title("a   two ways to distort a benchmark", loc="left",
                     fontsize=8)
     ax[0].legend(frameon=False, fontsize=6, loc="upper left")
 
     y = np.arange(len(TASKS))
-    ax[1].barh(y + 0.19, [W_DEPLOY[t] for t in TASKS], height=0.36,
+    ax[1].barh(y, [W_DEPLOY[t] for t in TASKS], height=0.60,
                color=CB[1], label="whole proteome")
-    ax[1].barh(y - 0.19, [W_RESTRICT[t] for t in TASKS], height=0.36,
-               color=CB[0], label="proteins carrying a site")
     ax[1].axvline(0.5, color="0.4", lw=0.9, ls="--")
     ax[1].set_yticks(y)
     ax[1].set_yticklabels(TASKS, fontsize=6)
@@ -159,59 +146,51 @@ def figure1():
 
 # ---------------------------------------------------------------- figure 2
 def figure2():
-    """What a benchmark determines: worst case, measured c, and scope."""
-    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.8))
-
-    # (a) required gap against W, worst case, with the eight tasks
-    w = np.linspace(0.01, 0.985, 400)
-    ax[0].plot(w, w / (1 - w), color="0.25", lw=1.2)
-    ax[0].axhline(1.0, color=CB[1], lw=0.8, ls="--")
-    ax[0].axvline(0.5, color=CB[1], lw=0.8, ls=":")
+    """Distinct scales: reference support, empirical effects, conditional scope."""
+    fig, ax = plt.subplots(1, 3, figsize=(7.2, 3.15), gridspec_kw={"width_ratios":[1,1.35,1]})
+    w=np.linspace(.01,.985,400)
+    ax[0].plot(w,w/(1-w),color=".25",lw=1.2)
+    ax[0].axhline(1,color=CB[1],lw=.8,ls="--")
+    ax[0].axvline(.5,color=CB[1],lw=.8,ls=":")
     for t in TASKS:
-        W = W_DEPLOY[t]
-        ax[0].plot(W, W / (1 - W), "o", ms=3.5, color=CB[0], zorder=3)
+        W=W_DEPLOY[t]
+        ax[0].plot(W,W/(1-W),"o",ms=3.5,color=CB[0])
     ax[0].scatter([W_DEPLOY[t] for t in TASKS],
-                  [DELTA_O_BENCH[t] for t in TASKS], s=9, marker="s",
-                  color=CB[2], zorder=3, label="largest gap observed")
-    ax[0].legend(frameon=False, fontsize=5.5, loc="lower left",
-                 bbox_to_anchor=(0.0, -0.50), handlelength=1.2)
+                  [DELTA_O_BENCH[t] for t in TASKS],s=11,marker="s",color=CB[2],
+                  label="published channel gap")
     ax[0].set_yscale("log")
-    ax[0].set_xlabel("unobserved weight $W$")
-    ax[0].set_ylabel("gap required, $W/(1-W)$")
-    ax[0].set_title("a   worst case", loc="left", fontsize=8)
-    # the dashed line is the ceiling a difference of AUROCs cannot pass; label it
-    # in the empty upper-left rather than on top of the curve
-    ax[0].text(0.03, 30, "max possible gap = 1", color=CB[1], fontsize=5.5)
+    ax[0].set_xlabel("reference weight $W$")
+    ax[0].set_ylabel("gap threshold $W/(1-W)$")
+    ax[0].set_title("a   unrestricted bound",loc="left",fontsize=8)
+    ax[0].text(.03,30,"maximum gap = 1",color=CB[1],fontsize=6)
+    ax[0].legend(frameon=False,fontsize=5.8,loc="upper left",bbox_to_anchor=(-.15,-.27))
 
-    # (b) required gap under the measured c
-    y = np.arange(len(TASKS))
-    need = [W_DEPLOY[t] * MEASURED_C[t] for t in TASKS]
-    ax[1].barh(y, need, color=CB[0], height=0.6, label="required, measured $c$")
-    ax[1].plot([DELTA_O_BENCH[t] for t in TASKS], y, "s", ms=3.5,
-               color=CB[2], label="gap observed")
-    ax[1].set_yticks(y)
-    ax[1].set_yticklabels(TASKS, fontsize=6)
-    ax[1].invert_yaxis()
-    ax[1].set_xlabel("AUROC gap")
-    ax[1].set_title("b   with $c$ measured", loc="left", fontsize=8)
-    ax[1].legend(frameon=False, fontsize=6, loc="lower right", ncol=1)
+    y=np.arange(len(TASKS))
+    do=np.array([value(t,"delta_O") for t in TASKS])
+    dr=np.array([value(t,"delta_R") for t in TASKS])
+    lo=np.array([value(t,"delta_R_min") for t in TASKS])
+    hi=np.array([value(t,"delta_R_max") for t in TASKS])
+    for i in y:ax[1].plot([do[i],dr[i]],[i,i],color=".7",lw=.8)
+    ax[1].plot(do,y,"s",ms=3.5,color=CB[0],label=r"observed region $O_R$")
+    ax[1].errorbar(dr,y,xerr=[dr-lo,hi-dr],fmt="o",ms=3.5,color=CB[1],
+                   lw=.8,capsize=2,label="all reconstructed negatives")
+    ax[1].axvline(0,color=".4",ls=":",lw=.8)
+    ax[1].set_yticks(y);ax[1].set_yticklabels(TASKS,fontsize=6.1)
+    ax[1].invert_yaxis();ax[1].set_xlabel("augmentation AUROC effect")
+    ax[1].set_title("b   measured on reconstruction R",loc="left",fontsize=8)
+    ax[1].legend(frameon=False,fontsize=5.8,loc="upper left",bbox_to_anchor=(-.15,-.27))
 
-    # (c) the population the benchmark supports
-    share = [SCOPE[t][1] for t in TASKS]
-    ax[2].barh(y, share, color=[CB[1] if v < 20 else CB[0] for v in share],
-               height=0.55, label="(A) any gap, worst case")
-    ax[2].plot([SCOPE_MEAS[t] for t in TASKS], y, "D", ms=3.5, color="0.2",
-               label="(C) own gap, measured $c$")
-    ax[2].set_yticks(y)
-    ax[2].set_yticklabels([])
-    ax[2].invert_yaxis()
-    ax[2].set_xlim(0, 108)
-    ax[2].set_xlabel("% of proteome covered")
-    ax[2].legend(frameon=False, fontsize=5.5, loc="lower left",
-                 bbox_to_anchor=(0.0, -0.50), handlelength=1.2)
-    ax[2].set_title("c   population supported", loc="left", fontsize=8)
-
-    fig.tight_layout()
+    ax[2].barh(y-.16,[SCOPE[t][1] for t in TASKS],height=.30,color=CB[0],
+               label="(A) half-mass screen")
+    ax[2].barh(y+.16,[SCOPE_SCENARIO[t] for t in TASKS],height=.30,color=CB[3],
+               label="(B) zero-shift scenario")
+    for i,t in enumerate(TASKS):
+        ax[2].text(SCOPE[t][1]+1.3,i-.16,str(SCOPE[t][0]),fontsize=6,va="center")
+    ax[2].set_yticks(y);ax[2].set_yticklabels([]);ax[2].invert_yaxis()
+    ax[2].set_xlim(0,80);ax[2].set_xlabel("reference proteins retained (%)")
+    ax[2].set_title("c   conditional scope screens",loc="left",fontsize=8)
+    ax[2].legend(frameon=False,fontsize=5.8,loc="upper left",bbox_to_anchor=(-.15,-.27))
+    fig.tight_layout(w_pad=1.0)
     fig.savefig(f"{OUT}/fig2_identified.png")
     plt.close(fig)
     print("fig2_identified.png")
@@ -301,7 +280,7 @@ def figure4():
         ax[a].set_ylim(5e-7, 2)
         ax[a].set_xlabel("protein degree")
         ax[a].set_title(ttl, loc="left", fontsize=8)
-    ax[0].set_ylabel("propensity of appearing as a negative")
+    ax[0].set_ylabel("mean share of eligible partners")
     ax[1].axhline(1e-6, color="0.4", lw=0.8, ls=":")
     ax[1].text(4.6, 1.5e-6, "exactly zero", fontsize=6, color="0.3")
     ax[1].legend(frameon=False, fontsize=6, loc="upper right")
@@ -356,7 +335,7 @@ def figure5():
              label="false-negative rate")
     axt.axhline(0.5, color="0.6", lw=0.8, ls=":")
     axt.axvline(1, color="0.4", lw=0.8, ls="--")
-    axt.text(1.3, 0.62, "$T=1$ already\ncrosses $W=0.5$", fontsize=5.5)
+    axt.text(1.3, 0.62, "mean $W$ at $T=1$\nexceeds 0.5", fontsize=5.5)
     axt.set_xlabel("donor threshold $T$")
     axt.set_title("c   what the threshold buys", loc="left", fontsize=8)
     axt.legend(frameon=False, fontsize=6, loc="center right")

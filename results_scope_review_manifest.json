@@ -1,0 +1,203 @@
+{
+  "threshold": 10,
+  "family": "esm2",
+  "train": "replica",
+  "estimand": "Per-split empirical AUROC difference, fixed positives; no full-proteome extrapolation",
+  "aggregation": "Unweighted means of split-specific ensemble statistics; mean(W*c) is not mean(W)*mean(c)",
+  "max_identity_residual": 5.551115123125783e-17,
+  "fasta_sha256": "4adf267820cee3bfde364e155717ed8b7f4363a5075e73d0978516b7325b35e2",
+  "prediction_files": [
+    {
+      "name": "acetylation_k__replica__baseline__split0__on_rebuilt.pred.tsv",
+      "sha256": "11c119ba0c0ffecbfc95004681deb05880be121666ffc3db049bc73d278a93e3"
+    },
+    {
+      "name": "acetylation_k__replica__baseline__split1__on_rebuilt.pred.tsv",
+      "sha256": "03ffc174b7b3d0e9a749bddc069b4ae100e273ecf55bcf8ffb308e4953859612"
+    },
+    {
+      "name": "acetylation_k__replica__baseline__split2__on_rebuilt.pred.tsv",
+      "sha256": "67697d9dcbcb513a395f20a54f57c2fae7266f50646e015ffb9bdabe82dd8c23"
+    },
+    {
+      "name": "acetylation_k__replica__ppi__split0__esm__on_rebuilt.pred.tsv",
+      "sha256": "d96a3bf095b81d46f91f1478f1c38bc605e986bec2930457f1893a7684130f9f"
+    },
+    {
+      "name": "acetylation_k__replica__ppi__split1__esm__on_rebuilt.pred.tsv",
+      "sha256": "f2d9d547e398a4fa2cf21acd05619a55bceaf4244fa0d18c6d3890ad8e16639c"
+    },
+    {
+      "name": "acetylation_k__replica__ppi__split2__esm__on_rebuilt.pred.tsv",
+      "sha256": "2e24a0552e8ef506f5a3a5581b1c3b55e0f72125ef9c1a7d31c893ccab7b770a"
+    },
+    {
+      "name": "glycosylation_n__replica__baseline__split0__on_rebuilt.pred.tsv",
+      "sha256": "54e5b1c7e10cbb94d243e8213587aca6c981834a22f40d3b194d37f7ba5c4504"
+    },
+    {
+      "name": "glycosylation_n__replica__baseline__split1__on_rebuilt.pred.tsv",
+      "sha256": "db81eef2650bdd676c199bf9baa28428c31d54215ba72557b7d287a4eb9556dd"
+    },
+    {
+      "name": "glycosylation_n__replica__baseline__split2__on_rebuilt.pred.tsv",
+      "sha256": "7a171db5d57363432f38493e3fd3db22e2b88466162e71eb010b549ec10abd06"
+    },
+    {
+      "name": "glycosylation_n__replica__ppi__split0__esm__on_rebuilt.pred.tsv",
+      "sha256": "a70b8c0e50aaab6766ebdc380df03454856a3a27cf612033c3b299feec14d470"
+    },
+    {
+      "name": "glycosylation_n__replica__ppi__split1__esm__on_rebuilt.pred.tsv",
+      "sha256": "9e08514ce57c2e5f9706aaef7abd2e79e2bfc67f63f9faba3a77db93067d9cbc"
+    },
+    {
+      "name": "glycosylation_n__replica__ppi__split2__esm__on_rebuilt.pred.tsv",
+      "sha256": "1eac17af9468fd7adbfc831342745c2193528e6c0badb267fbfdd50ea15823bf"
+    },
+    {
+      "name": "methylation_k__replica__baseline__split0__on_rebuilt.pred.tsv",
+      "sha256": "4192361c5b807708a96f11c5b48da986607d921c2268c743f5ec55dc3ba28d1b"
+    },
+    {
+      "name": "methylation_k__replica__baseline__split1__on_rebuilt.pred.tsv",
+      "sha256": "eda7c16beaff1f532990ef8b2ad11ba6ed9ff526a3208066e6db05b77e6367a1"
+    },
+    {
+      "name": "methylation_k__replica__baseline__split2__on_rebuilt.pred.tsv",
+      "sha256": "8d277554817b25dc126e5bfeb57a5d9bb3baf4f9e0ac4ed15cad5fb336d4a2d3"
+    },
+    {
+      "name": "methylation_k__replica__ppi__split0__esm__on_rebuilt.pred.tsv",
+      "sha256": "f63f24144ae92efdc209ecef96e30b5d9016a0e7cc5ec505d3f0a21d0e10ecc0"
+    },
+    {
+      "name": "methylation_k__replica__ppi__split1__esm__on_rebuilt.pred.tsv",
+      "sha256": "310150e3f6b14786d57700a94cf566338cb5fde8b6772cbc28eae7725636ab81"
+    },
+    {
+      "name": "methylation_k__replica__ppi__split2__esm__on_rebuilt.pred.tsv",
+      "sha256": "662e6870e6177a7a4ab67f3a592b728d09d5a59eef76f37f7bd67914d2ea1da2"
+    },
+    {
+      "name": "methylation_r__replica__baseline__split0__on_rebuilt.pred.tsv",
+      "sha256": "2bd859b4a8c8a4088321518355f8b14d34638baab1846c3736358be4cdc62215"
+    },
+    {
+      "name": "methylation_r__replica__baseline__split1__on_rebuilt.pred.tsv",
+      "sha256": "39bd0344c877676f065fc6d77a0d08d7d82f2c1a64bd8a1edb502f161aefbbec"
+    },
+    {
+      "name": "methylation_r__replica__baseline__split2__on_rebuilt.pred.tsv",
+      "sha256": "3d127cb353ac5463d488a8377ae38c72dc17bbf1544eb3d04d8c78e2344c8c47"
+    },
+    {
+      "name": "methylation_r__replica__ppi__split0__esm__on_rebuilt.pred.tsv",
+      "sha256": "1547bf70df1f5afed1fafe3175ea258563ff54716a526c095d0811a286249963"
+    },
+    {
+      "name": "methylation_r__replica__ppi__split1__esm__on_rebuilt.pred.tsv",
+      "sha256": "2d32d348da4cbc636e106383842d3877bcc3bd2000b5d6829964622dfb3a8e86"
+    },
+    {
+      "name": "methylation_r__replica__ppi__split2__esm__on_rebuilt.pred.tsv",
+      "sha256": "05033f6c44dfc6d7d4708fa1ed00995b0bf3ac1d5197003d6c560c3e836a31e1"
+    },
+    {
+      "name": "phosphorylation_st__replica__baseline__split0__on_rebuilt.pred.tsv",
+      "sha256": "fa2ae3704eb166e6a97d0350158543cbd7a05f0b691c0e6be60e03a4284d1231"
+    },
+    {
+      "name": "phosphorylation_st__replica__baseline__split1__on_rebuilt.pred.tsv",
+      "sha256": "b77ea2aae1fd266ebfd23426d618d1dcfbf7b8ffc8a9bd4cc6d96f946a1518df"
+    },
+    {
+      "name": "phosphorylation_st__replica__baseline__split2__on_rebuilt.pred.tsv",
+      "sha256": "9b739860f15b71396805a79bfac60edfa785bb0c313f64258dcc8ea3211a8cf7"
+    },
+    {
+      "name": "phosphorylation_st__replica__ppi__split0__esm__on_rebuilt.pred.tsv",
+      "sha256": "47ec2073801dd225610342dd133a2783db2b0c76b0b89fb9944a6ce076c21d7e"
+    },
+    {
+      "name": "phosphorylation_st__replica__ppi__split1__esm__on_rebuilt.pred.tsv",
+      "sha256": "a1d68e333bc82019ebba8f3072938a30150ce945587a59ee8d31146f34239723"
+    },
+    {
+      "name": "phosphorylation_st__replica__ppi__split2__esm__on_rebuilt.pred.tsv",
+      "sha256": "1f14e6b927f12bc4af87e4660b79cee73214a8643ddf86444aeeef950a5feac7"
+    },
+    {
+      "name": "phosphorylation_y__replica__baseline__split0__on_rebuilt.pred.tsv",
+      "sha256": "cbc735b4f9b2256b6989f50c6cea6e19843086b328b11f3365498ae7bc3fa3b3"
+    },
+    {
+      "name": "phosphorylation_y__replica__baseline__split1__on_rebuilt.pred.tsv",
+      "sha256": "68955d9a0406ee7875e54fe532137a99c796dfa19da04a46cfaeb8438ec2a854"
+    },
+    {
+      "name": "phosphorylation_y__replica__baseline__split2__on_rebuilt.pred.tsv",
+      "sha256": "e2345fde332ca55963afb9e15e6c2cf38b8f4d2734ae6b12e702f39a83343b08"
+    },
+    {
+      "name": "phosphorylation_y__replica__ppi__split0__esm__on_rebuilt.pred.tsv",
+      "sha256": "1862913f4a4147808774e80a781d0b0f772b66f143dbbdb73193e889d30cf616"
+    },
+    {
+      "name": "phosphorylation_y__replica__ppi__split1__esm__on_rebuilt.pred.tsv",
+      "sha256": "f6ca118bef2ed71b89cf61144fa10e5bead941fadacb66403c89fa5934786845"
+    },
+    {
+      "name": "phosphorylation_y__replica__ppi__split2__esm__on_rebuilt.pred.tsv",
+      "sha256": "1a666f1e48c9970d7afdf5a215ba36cfe5a6f1d42bd8071de803ad595e985689"
+    },
+    {
+      "name": "sumoylation_k__replica__baseline__split0__on_rebuilt.pred.tsv",
+      "sha256": "191d594cb8ac7b691eb12d51385d55f5172e94e08c8db0e09ff3138152106994"
+    },
+    {
+      "name": "sumoylation_k__replica__baseline__split1__on_rebuilt.pred.tsv",
+      "sha256": "3b48507f89ffa528539f719cf5907021a10acc6b2ad5df68ff9609622cb7ad47"
+    },
+    {
+      "name": "sumoylation_k__replica__baseline__split2__on_rebuilt.pred.tsv",
+      "sha256": "5d0ff9e569f327d707f52403d6e7ee7e2d7b2be78c9975f3b64f12c7cf4d9b1b"
+    },
+    {
+      "name": "sumoylation_k__replica__ppi__split0__esm__on_rebuilt.pred.tsv",
+      "sha256": "0ec18cf8c845813aefc2c15856762094ab7ca99ef778e721a0f9b013d44a7989"
+    },
+    {
+      "name": "sumoylation_k__replica__ppi__split1__esm__on_rebuilt.pred.tsv",
+      "sha256": "e53bcc4b23c4f0ab880b3f89dcb34b043ac40299e883783b14fc67ea2a944d26"
+    },
+    {
+      "name": "sumoylation_k__replica__ppi__split2__esm__on_rebuilt.pred.tsv",
+      "sha256": "984dccfe67d85b1d94eb4b04ea89f3534db74e664811d73eb7c7c65aef22c728"
+    },
+    {
+      "name": "ubiquitination_k__replica__baseline__split0__on_rebuilt.pred.tsv",
+      "sha256": "c2dddbef19d489c774e2cc7e476c872833b5fa909948055f41a768f34217ed64"
+    },
+    {
+      "name": "ubiquitination_k__replica__baseline__split1__on_rebuilt.pred.tsv",
+      "sha256": "262d0c42e6b8c08ff93886a1f16a13456be5ac8f433747e5ffdd2b91de1e5183"
+    },
+    {
+      "name": "ubiquitination_k__replica__baseline__split2__on_rebuilt.pred.tsv",
+      "sha256": "5083995097ee53e0db7c91f0e6c73ad7a4f3ebf493aa54ab302147b6f0878302"
+    },
+    {
+      "name": "ubiquitination_k__replica__ppi__split0__esm__on_rebuilt.pred.tsv",
+      "sha256": "e61c90746b394775e739658d52ce76b1d8fd41d20018bc7f261dd5b5f2255f62"
+    },
+    {
+      "name": "ubiquitination_k__replica__ppi__split1__esm__on_rebuilt.pred.tsv",
+      "sha256": "741e5d9e5c9fa57844b5865e035ec039eae5cb1c6a2a7e4da2e7f61bd3271623"
+    },
+    {
+      "name": "ubiquitination_k__replica__ppi__split2__esm__on_rebuilt.pred.tsv",
+      "sha256": "bb44df66cb1edc06d5111ba60f98dd886e2209875e19d41de54b201a39cdbf55"
+    }
+  ]
+}

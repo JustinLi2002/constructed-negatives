@@ -1,0 +1,5 @@
+network	source	proteins	nonedge_pairs	admitted_pairs	excluded_pair_share	excluded_proteins	configuration_tau	proteins_above_tau
+string_phys_700	clusterC\results_uniform\cl3_string_phys_700_per_protein.tsv	10746	57646366	51003134	0.11524112378566931	0	2	7521
+string_phys_900	clusterC\results_uniform\cl3_string_phys_900_per_protein.tsv	8706	37847934	36164066	0.04449035448011507	0	2	5518
+biogrid_human	clusterC\results_uniform\cl3_biogrid_human_per_protein.tsv	20088	200879972	12228747	0.9391241103916522	0	15	13125
+hippie_063	clusterC\results_uniform\cl3_hippie_063_per_protein.tsv	18740	174615483	7314295	0.95811199056157	0	42	9737

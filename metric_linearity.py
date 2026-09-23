@@ -39,21 +39,14 @@ from sklearn.metrics import average_precision_score, roc_auc_score
 
 from measured_c import (ORDER, PATTERN, PROTEIN, SCORE, SITE, LABEL, depth_of,
                         family)
+from prediction_files import index_predictions
 
 BINS = [0, 1, 2, 3, 5, 10, 20, 50, np.inf]
 
 
 def collect(root, data, fam, train, ev):
-    files = {}
-    for path in sorted(glob.glob(os.path.join(root, "*.pred.tsv"))):
-        m = re.match(PATTERN, os.path.basename(path))
-        if not m:
-            continue
-        d = m.groupdict()
-        if d["train"] == train and d["eval"] == ev:
-            files.setdefault((d["task"], family(d["cond"], d["source"])),
-                             {})[d["split"]] = path
-    return files
+    return {(task, model): splits for (task, model, evaluation), splits
+            in index_predictions(root, train).items() if evaluation == ev}
 
 
 def main(root, data, fam, train, ev):

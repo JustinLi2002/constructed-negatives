@@ -1,123 +1,147 @@
 # Constructed negatives determine the population a benchmark can rank over
 
-Code for the paper of the same name, which spins out of
-[`ptm-audit`](https://github.com/JustinLi2002/ptm-audit) (Li & Yu, *Negative
-sampling determines the sign of protein-level feature contributions in
-modification site prediction*).
+Analysis code for Paper 2, using reconstructed data and predictions from
+[`ptm-audit`](https://github.com/JustinLi2002/ptm-audit). License: **MIT**.
+The development repository remains private during revision. This checkout
+does not constitute a public release or a new Paper 2 Zenodo snapshot.
 
-## The claim
+## What is measured
 
-A benchmark that draws negatives only from entities carrying at least `T`
-positives supplies no negatives at all from entities below `T`. The propensity
-of appearing as a negative is exactly zero on that region, so this is a
-**positivity violation, not covariate shift**: importance weighting has a zero
-denominator, and no estimator using only that benchmark identifies the
-deployment-distribution effect. Every diagnostic computable inside the
-benchmark comes back clean, because the data carry no information about the
-missing region for them to disagree with.
+`W` is the excluded candidate-negative mass in a specified target. The
+half-mass condition only permits a sufficiently large observed gap to satisfy
+a worst-case bound; it does not certify an actual ranking. The positive
+distribution and compared scoring functions stay fixed within a decomposition.
+Reference-proteome coverage and reconstruction effects are separate outputs.
+The latter compare actual ESM2 augmentation against baseline within each
+split, with the reconstruction's own weights. They establish neither
+DeepMVP–MusiteDeep rankings nor full-proteome performance.
 
-What remains is partial identification, in Manski's sense. This code
-establishes the violation, measures its size on two real benchmarks, and
-tests when a reconstruction can replace the worst case with a measurement.
+## Installation
 
-## Requirements
+Python 3.10+ and `numpy`, `pandas`, `scipy`, `scikit-learn`, `matplotlib`:
 
-Python 3.10+, `numpy`, `scipy`, `scikit-learn`, `pandas`, `matplotlib`. No
-GPU and no cluster; the synthetic experiment and the figure script run in
-minutes on a laptop.
-
-## Two external data dependencies
-
-Reviewers should know about these before trying to run everything below:
-
-1. **The PTM-side scripts** (`ptm_guarantee.py`, `ranking_identification.py`,
-   `measured_c.py`, `metric_linearity.py`, `deployment_scope.py`,
-   `threshold_tradeoff.py`) read the reconstructed positive/negative sets and
-   per-site predictions from the first paper's audit, not from anything in
-   this repository. `ptm_guarantee.py` and `ranking_identification.py` take a
-   `root` argument that is a checkout of `ptm-audit`; the rest read from a
-   `--data`/`PTM_AUDIT_BASE` directory laid out the way that repository's
-   `rebuilt/` is. **These will not run until `ptm-audit`'s reconstructions are
-   themselves public — an open dependency, tracked in
-   `HANDOVER_identification.md`.**
-2. **The PPI-side scripts** (`cl3_exclusion.py`, `ddb_sampling.py`,
-   `ppi_consequence.py`, `shift_check.py`) read an edge list such as
-   `data/string_phys_700.tsv`. `data/` is gitignored here because the full
-   STRING download is large, but the network itself is public: STRING
-   physical links v12.0 (string-db.org), filtered to human, score >= the
-   threshold named in the filename. BioGRID (release 4.4.246) and HIPPIE
-   (v2.4) are used the same way for the cross-network robustness checks.
-   UPNA-PPI's own released negatives are public at
-   github.com/alxndgb/UPNA-PPI.
-
-Everything else — the synthetic-population experiment, the figure script, and
-the per-replicate result files these two families of scripts already
-produced — is self-contained in this repository.
-
-## Contents
-
-| script | reproduces | needs |
-|---|---|---|
-| `identification_bound.py` | Synthetic populations: the exact stratum decomposition, and three fill-in rules for the strata a benchmark never supplies (endpoint, observed-trend, observed-curvature). Backs Fig. 1a/1c and the Methods residual claims. | nothing external |
-| `ptm_guarantee.py` | The assumption-free guarantee (eq. 4/6) applied to the eight real PTM tasks: `W`, `Δ_O`, and whether the guarantee fires. Backs Fig. 1b, Table 1. | `ptm-audit` checkout |
-| `ranking_identification.py` | The ranking-identification criterion (eq. 5) on the same eight tasks and the 42 pairwise feature-channel comparisons. Backs Fig. 2a. | `ptm-audit` checkout |
-| `measured_c.py` | Measured *c* per task, holding the positive set fixed and stratifying only the negatives. Backs Fig. 2b, Table 1's *c* column. | `ptm-audit` rebuilt data |
-| `deployment_scope.py` | The scope statistic *d_min*: the smallest annotation depth at which *W* falls to 0.5 or below. Backs Table 1's column (A). | `ptm-audit` rebuilt data |
-| `metric_linearity.py` | The AUROC-vs-AUPRC residual comparison — why the exact decomposition holds under one metric and not the other. Backs Extended Data Fig. 2b. | `ptm-audit` rebuilt data |
-| `shift_check.py` | Splits the benchmark's error into the unobserved-mass term and the within-*O* covariate-shift term, on the STRING >=700 network. Backs the Methods *Within-O shift* paragraph. Imports `cl3_exclusion`, `ppi_consequence`, and `reversal_bound`. | `data/string_phys_700.tsv` |
-| `cl3_exclusion.py` | Which proteins can contribute a negative under UPNA-PPI's length-3-path prefilter, by degree. Backs Table 2, Extended Data Table 1. | an edge list (`edges.tsv`) |
-| `ddb_sampling.py` | Whether DDBSampling's degree-balanced negative rule (the taxonomy's corrective case) still leaves a zero region. Backs the taxonomy table and the Discussion's "do not use a donor threshold as false-negative control" point. | an edge list |
-| `ppi_consequence.py` | The controlled consequence experiment: real topology and real sampling rule, constructed features with known ground truth, so the effect is attributable to the rule and not an artefact. Backs Fig. 2c-style results and the "violation changes conclusions" section. | an edge list |
-| `threshold_tradeoff.py` | The donor-threshold cost/benefit trade on one axis: `W_un(T)` against the expected false-negative rate `FN(T)`. Backs the "what the threshold was buying" figure. | `ptm-audit` rebuilt data |
-| `make_figures.py` | All main and Extended Data figures, drawn only from `results_*.txt` already in this repository (the small numbers embedded at the top of the script are transcribed from those files and named there, so they can be checked rather than trusted). | nothing external once the `results_*.txt` files exist |
-| `reversal_bound.py` | Not run standalone for its own named result; imported by `shift_check.py` for the split-effect identity. Kept for that reproducibility path. | nothing external |
-
-## Quick start
-
+```sh
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install numpy pandas scipy scikit-learn matplotlib
 ```
-# self-contained
-python identification_bound.py --sweep --seeds 20 --out sweep_T_20seed.tsv
-python identification_bound.py --demo
 
-# needs a ptm-audit checkout
-python ptm_guarantee.py /path/to/ptm-audit
-python ranking_identification.py /path/to/ptm-audit
-python measured_c.py --root ~/HRP/pdisjoint_runs_v2 --data ~/HRP/rebuilt
-python metric_linearity.py --root ~/HRP/pdisjoint_runs_v2 --data ~/HRP/rebuilt
-PTM_AUDIT_BASE=/path/to/rebuilt python deployment_scope.py
-PTM_AUDIT_BASE=/path/to/rebuilt python threshold_tradeoff.py
+On Windows activate with `.venv\Scripts\Activate.ps1`. Existing cluster
+environments can be used directly. No GPU or retraining is needed for the
+archived-prediction analyses. Reanalysis used Python 3.12.2, NumPy 1.26.4,
+pandas 2.2.2, SciPy 1.13.1, scikit-learn 1.5.1 and Matplotlib 3.9.2.
 
-# needs a network edge list (data/ is gitignored; see "Two external data
-# dependencies" above for where to get one)
-python cl3_exclusion.py data/string_phys_700.tsv --out string700
-python ddb_sampling.py data/string_phys_700.tsv --out string700_ddb
-python ppi_consequence.py data/string_phys_700.tsv --seeds 5
-python shift_check.py
+## Quick start and expected output
 
-# once the results_*.txt files above exist
+```sh
+python prediction_files.py --self-test
+python scope_reanalysis.py --self-test
+python support_unit_audit.py --self-test
+python verify_scope_review.py
+python support_unit_audit.py
 python make_figures.py
 ```
 
-Every script prints or writes a `results_*.txt`/`.tsv` file; those already in
-this repository are the per-replicate records the manuscript's numbers are
-computed from, kept so a reviewer can check a reported figure against the
-run that produced it rather than re-running everything from scratch.
+Expected: condition-isolation checks, four scope tests and the support-unit
+counterexample pass; verification checks 792 run/depth rows, 48 input hashes
+and all 16 rows of Table 1. Five PNGs are written to `figures/`: three main
+figures and two Extended Data figures. These saved-result checks/redraws take
+seconds on a workstation, without external prediction files.
 
-## What the results say
+## External data
 
-The decomposition `Δ_deploy = Σ_k w_k · Δ_k` is exact — residual at machine
-precision in every configuration tested — which is what licenses everything
-else. Three fill-in rules were tested for the strata a benchmark does not
-supply, and the resolution that survives past a realistic threshold (not the
-missing mass) is the binding constraint: see the manuscript's Results,
-"Where shape restrictions can and cannot help", for the numbers.
+PTM data: [Zenodo 21670043](https://doi.org/10.5281/zenodo.21670043).
+Earlier audit v1.2: [Zenodo 22102323](https://doi.org/10.5281/zenodo.22102323).
+An archive DOI does not establish that every trained score file is included.
+Before a rerun, check the 48 filenames and hashes in
+`results_scope_review_manifest.json` against retrieved predictions. Missing
+files must be obtained from the matching audit release; do not substitute
+shuffled controls or silently regenerate unmatched models.
 
-## Provenance
+Required base layout:
 
-The original `identification_bound.py` was written 2026-08-20 and was never
-committed anywhere; it is gone. This is a re-implementation from the
-feasibility table it produced (recorded in the handover) plus the first
-paper's `analysis/synthetic_reversal.py`, and it is not seed-compatible with
-the original — the structure reproduces (unobserved weights match to 0.01,
-the decomposition is exact) but the validity column does not, and the
-handover records that correction.
+```text
+HRP/
+  rebuilt/{task}_all.tsv
+  pdisjoint_runs_v2/{task}__replica__baseline__split{0,1,2}__on_rebuilt.pred.tsv
+  pdisjoint_runs_v2/{task}__replica__ppi__split{0,1,2}__esm__on_rebuilt.pred.tsv
+  deepmvp/DeepMVP/data/swiss_prot_human_20190214.fasta
+```
+
+The within-O shift diagnostic also requires corresponding `__on_replica`
+files. Scores must contain `protein`, `pos`, `y`, `y_pred`, `init_0`, `init_1`.
+Missing or unmatched sites cause an error. A different snapshot is a new
+analysis, not a reproduction of the archived numbers.
+
+PPI inputs are STRING physical v12.0, BioGRID 4.4.246 and HIPPIE's 2026-08-28
+snapshot. Fetch commands are in `hpc/fetch_networks.sh`; raw downloads are not
+bundled. Saved `clusterC/results_uniform/*_per_protein.tsv` files suffice for
+the node-versus-pair audit and plotted summaries. UPNA-PPI's negative set is
+in [its source repository](https://github.com/alxndgb/UPNA-PPI); its proprietary
+positive graph is not supplied here.
+
+## Script-to-result map
+
+| Script | Output / manuscript role | Inputs and compute |
+|---|---|---|
+| `scope_reanalysis.py` | Table 1, Fig. 1b/2b/2c; per-run, per-depth, coverage, summary, hash manifest | FASTA, rebuilt sites, 48 prediction files; CPU/I/O, no training |
+| `prediction_files.py` | Condition-aware indexing; duplicate rejection and shuffled-control isolation | Filenames; seconds |
+| `measured_c.py` | Compact per-split regional effects | Rebuilt sites and predictions; CPU/I/O |
+| `deployment_scope.py` | Reference screen (A) and conditional scenario (B), no measured C | FASTA and annotations; CPU/I/O |
+| `ptm_guarantee.py`, `ranking_identification.py` | Published-gap scenarios and 42 channel comparisons, Fig. 2a | Earlier audit checkout; not reconstruction certificates |
+| `metric_linearity.py` | AUROC/average-precision arithmetic diagnostic, ED Fig. 2b | Rebuilt sites and baseline predictions; CPU/I/O |
+| `shift_check_ptm.py` | Per-split within-O shift | Replica/rebuilt evaluations; CPU/I/O |
+| `shift_check.py` | Controlled PPI decomposition, Fig. 1c | STRING graph and controlled features; model fitting |
+| `identification_bound.py` | Synthetic threshold/shape experiments, ED Fig. 1 | Self-contained; full twenty-seed grid includes fitting |
+| `cl3_exclusion.py` | Eligible partners by degree, Fig. 3 / ED Table 1 | Edge list; graph size determines time/memory |
+| `support_unit_audit.py` | `results_support_unit.tsv`, pair coverage and inclusive cutoff | Saved per-protein counts; seconds |
+| `ddb_sampling.py` | Degree-composition taxonomy evidence | Edge list; graph-dependent |
+| `ppi_consequence.py` | Controlled PPI effects, ED Fig. 2a; optional per-seed output | Edge list; full grid includes model fitting |
+| `threshold_tradeoff.py` | Contamination sensitivity, ED Fig. 2c | Rebuilt sites and external `fn_sensitivity.py` |
+| `reversal_bound.py` | Helpers imported by PPI decomposition | Imported, not a separate experiment |
+| `make_figures.py` | All five PNGs | Saved tables; seconds |
+| `verify_scope_review.py` | Numeric/provenance/Table 1 checks | Saved outputs; seconds |
+
+Full external-data runtimes have not been benchmarked consistently. A
+synthetic-sweep runtime should not be interpreted as a graph-processing time.
+
+## Recompute PTM analyses
+
+```sh
+python scope_reanalysis.py --base /path/to/HRP --out results_scope_review
+python measured_c.py --root /path/to/HRP/pdisjoint_runs_v2 --data /path/to/HRP/rebuilt
+PTM_AUDIT_BASE=/path/to/HRP python deployment_scope.py
+python shift_check_ptm.py --root /path/to/HRP/pdisjoint_runs_v2 --data /path/to/HRP/rebuilt --out results_shift_review.tsv
+python metric_linearity.py --root /path/to/HRP/pdisjoint_runs_v2 --data /path/to/HRP/rebuilt > results_metric_review.txt
+```
+
+Table 1 averages three separately evaluated split-specific ensemble statistics.
+Seven tasks reverse sign in all three splits; phosphorylation Y retains its
+sign. Among six initialization-specific comparisons, ubiquitination has one
+exception. These are empirical observations, not confidence guarantees.
+No prediction file supplies depth-zero negatives for a full-proteome claim.
+
+`threshold_tradeoff.py` imports `fn_sensitivity.py` from the first audit,
+archived at [Zenodo 21993819](https://doi.org/10.5281/zenodo.21993819). Retrieve
+that component before running the threshold analysis.
+
+## Current versus historical results
+
+Active PTM outputs: `results_scope_review_*`, `results_shift_review.tsv` and
+`results_metric_review.txt`. The 792-row table covers eight tasks, three splits,
+three score versions and eleven minimum depths. Identities are checked within
+each split; products of mean W and mean c are not used as mean effects.
+
+**Superseded:** `results_measured_c.txt`, `results_deployment_scope.txt`,
+`results_shift_check_ptm.txt`, `results_metric_linearity.txt` remain historical
+records only. Old indexing conflated shuffled and actual augmentation; the
+former could overwrite the latter. Old scope calculations also reused a fixed
+c across changing targets. The corrected scripts prevent both errors. Old
+measured-C percentages do not support the revised manuscript.
+
+`sweep_T_20seed.tsv` stores individual synthetic replicates. The saved PPI
+network sweep contains per-cell aggregates and reversal counts over twenty
+seeds, not original individual score records. `ppi_consequence.py --sweep`
+can regenerate per-seed records, but a fresh run must be labelled as such.
+The synthetic implementation reconstructs an earlier unarchived feasibility
+experiment; current saved outputs are the manuscript's numerical inputs.

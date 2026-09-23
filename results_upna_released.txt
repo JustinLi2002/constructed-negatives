@@ -1,0 +1,24 @@
+UPNA-PPI's released topological negatives, analysed directly
+(no reimplementation; degrees from BioGRID physical human, by symbol)
+
+proteins in their released universe          17975
+  appearing in at least one negative          4859
+  never appearing in any negative            13116  (73.0%)
+  matched to a BioGRID degree                16926
+
+    degree  proteins in negatives   % excluded   mean negs
+------------------------------------------------------------
+         1       445          407         8.5%      2800.3
+         2       443          412         7.0%      2137.6
+       3-4       784          736         6.1%      1459.9
+       5-9      1570         1393        11.3%       780.8
+     10-24      2902         1419        51.1%       217.3
+     25-49      2625           69        97.4%        13.6
+     50-99      3111           25        99.2%         4.3
+   100-249      3395            9        99.7%         2.1
+      250+      1651            2        99.9%         0.5
+------------------------------------------------------------
+
+median BioGRID degree, proteins that DO appear  :      7
+median BioGRID degree, proteins that NEVER do   :     76
+degree mass carried by proteins never sampled   :  0.975
