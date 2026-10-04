@@ -53,8 +53,13 @@ def verify(root):
         assert ref == [f'{row.W_reference:.3f}',f'{row.delta_bench_legacy:.4f}',str(row.d_min_A),
                        f'{row.A_pct:.1f}%',f'{row.B_scenario_pct:.1f}%']
         emp=[v.strip() for v in rows[i+8][1:]]
-        assert emp == [f'{row.W_R:.3f}',f'{row.delta_O:+.4f}',f'{row.c:.4f}',
+        q = r[(r.task==row.task)&(r.d_min==0)&(r.score=='y_pred')]
+        c_star = (q.delta_O.abs()/q.W_R).mean()  # mean of split-specific break-even values
+        assert emp == [f'{row.W_R:.3f}',f'{row.delta_O:+.4f}',f'{row.c:.4f}',f'{c_star:.4f}',
                        f'{row.delta_R:+.4f}',f'{row.signed_agreement_count}/3']
+    # Break-even check: in every run, c < c* exactly when the observed sign persists.
+    z = r[r.d_min==0]
+    assert ((z.c < z.delta_O.abs()/z.W_R) == (z.delta_O*z.delta_R > 0)).all()
     p = pd.read_csv(root/'results_support_unit.tsv',sep='\t')
     from support_unit_audit import audit
     for row in p.itertuples():
@@ -78,7 +83,7 @@ def verify(root):
             xml = ET.fromstring(z.read('word/document.xml'))
             tables = xml.findall('.//w:tbl',ns)
             counts = [len(t.findall('w:tr',ns)[0].findall('w:tc',ns)) for t in tables]
-            assert counts == [6,6,5,4,6], counts
+            assert counts == [6,7,5,4,6,5], counts
             for t,count in zip(tables,counts):
                 assert all(len(row.findall('w:tc',ns))==count for row in t.findall('w:tr',ns))
             comments=ET.fromstring(z.read('word/comments.xml')).findall('w:comment',ns)
@@ -88,7 +93,7 @@ def verify(root):
             assert image_hashes == expected
             body=''.join(xml.itertext())
             assert 'A failed sufficient condition does not override the directly' in body
-        print('DOCX: five physical tables with expected columns, eight comments, and five current figure bitmaps verified.')
+        print('DOCX: six physical tables with expected columns, eight comments, and five current figure bitmaps verified.')
 
 
 if __name__=='__main__':
