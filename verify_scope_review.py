@@ -101,7 +101,7 @@ def verify(root):
             assert image_hashes == expected
             body=''.join(xml.itertext())
             assert 'A failed sufficient condition does not override the directly' in body
-        print('DOCX: seven physical tables with expected columns, eight comments, and five current figure bitmaps verified.')
+        print('DOCX: seven physical tables with expected columns, eight comments, and six current figure bitmaps verified.')
 
 
 if __name__=='__main__':

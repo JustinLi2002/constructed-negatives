@@ -369,10 +369,68 @@ def figure5():
     print("fig5_consequence.png")
 
 
+def depth_profile(task_key):
+    """Per-depth unsampled-region effects, recovered exactly from the archived scan.
+
+    results_scope_review_perrun.tsv holds, for each minimum depth d, the count
+    n_U(d) and mean effect of unsampled negatives with depth >= d. Differencing
+    consecutive totals gives the mean effect of the negatives at depth d alone.
+    """
+    out = []
+    with open(os.path.join(RESULT_DIR, "results_scope_review_perrun.tsv"), encoding="utf-8") as fh:
+        rows = [r for r in csv.DictReader(fh, delimiter="\t")
+                if r["task"] == task_key and r["score"] == "y_pred"]
+    for split in sorted({r["split"] for r in rows}):
+        q = sorted((r for r in rows if r["split"] == split), key=lambda r: int(r["d_min"]))
+        n = [float(r["n_U"]) for r in q]
+        tot = [float(r["n_U"]) * (float(r["delta_U"]) if r["delta_U"] not in ("", "nan") else 0.0) for r in q]
+        for d in range(len(q)):
+            nd = n[d] - (n[d + 1] if d + 1 < len(q) else 0)
+            if nd > 0:
+                out.append((int(split), d, (tot[d] - (tot[d + 1] if d + 1 < len(q) else 0)) / nd, nd))
+    return out
+
+
+def figure6():
+    """Extended Data: effects by annotation depth on both sides of the threshold."""
+    with open(os.path.join(RESULT_DIR, "results_calibration_tiers.tsv"), encoding="utf-8") as fh:
+        tiers = [r for r in csv.DictReader(fh, delimiter="\t") if r["score"] == "y_pred" and r["k"] == "3"]
+    fig, axes = plt.subplots(2, 4, figsize=(7.2, 3.6), sharex=True)
+    for ax, t in zip(axes.ravel(), TASKS):
+        key = TASK_KEYS[t]
+        prof = depth_profile(key)
+        depths = sorted({d for _, d, _, _ in prof})
+        mean = [np.average([e for _, dd, e, _ in prof if dd == d], weights=[n for _, dd, _, n in prof if dd == d])
+                for d in depths]
+        for s, d, e, _ in prof:
+            ax.plot(d, e, ".", ms=2.5, color=CB[1], alpha=.35)
+        ax.plot(depths, mean, "o-", ms=2.8, lw=.9, color=CB[1], label="unsampled depths (R)")
+        for r in tiers:
+            if r["task"] == key:
+                lo, hi = int(r["depth_min"]), int(r["depth_max"])
+                ax.plot([lo, hi], [float(r["effect"])] * 2, color=CB[0], lw=1.1, alpha=.7)
+        ax.plot([], [], color=CB[0], lw=1.1, label="observed depth tiers")
+        ax.axvline(10, color=".4", ls="--", lw=.7)
+        ax.axhline(0, color=".6", ls=":", lw=.7)
+        ax.set_xscale("log")
+        ax.set_title(t, fontsize=7)
+        ax.tick_params(labelsize=6)
+    for ax in axes[1]:
+        ax.set_xlabel("annotation depth", fontsize=6.5)
+    for ax in axes[:, 0]:
+        ax.set_ylabel("augmentation effect", fontsize=6.5)
+    axes[0, 0].legend(frameon=False, fontsize=5.5, loc="lower right")
+    fig.tight_layout()
+    fig.savefig(f"{OUT}/fig6_depth_profile.png")
+    plt.close(fig)
+    print("fig6_depth_profile.png")
+
+
 if __name__ == "__main__":
     figure1()
     figure2()
     figure3()
     figure4()
     figure5()
+    figure6()
     print("\nwritten to %s/" % OUT)
