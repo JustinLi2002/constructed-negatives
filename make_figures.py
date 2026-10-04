@@ -50,6 +50,8 @@ def boot(task, column):
     return float(BOOT[TASK_KEYS[task]][column])
 def calib(task, column):
     return float(CALIB[TASK_KEYS[task]][column])
+with open(os.path.join(RESULT_DIR, "results_calibration_bootstrap.tsv"), encoding="utf-8") as fh:
+    CALIB_BOOT = {r["task"]: r for r in csv.DictReader(fh, delimiter="\t")}
 # results_shift_check.txt, r2 = 0.90, STRING physical >= 700
 # (W, unobserved-mass term, within-region shift term)
 SHIFT = [(0.4789, -0.0262, +0.0018), (0.7880, -0.1451, +0.0001),
@@ -198,7 +200,10 @@ def figure2():
     cs=np.array([calib(t,"c_star") for t in TASKS])
     slo=np.array([boot(t,"c_star_lo") for t in TASKS]); shi=np.array([boot(t,"c_star_hi") for t in TASKS])
     h=np.array([calib(t,"h") for t in TASKS])
-    ax[2].plot(h,y,"|",ms=7,mew=1.2,color=".55",label=r"within-$O$ tier spread $h$")
+    hlo=np.array([float(CALIB_BOOT[TASK_KEYS[t]]["h_3_lo"]) for t in TASKS])
+    hhi=np.array([float(CALIB_BOOT[TASK_KEYS[t]]["h_3_hi"]) for t in TASKS])
+    ax[2].errorbar(h,y,xerr=[h-hlo,hhi-h],fmt="|",ms=7,mew=1.2,color=".55",lw=.8,capsize=0,
+                   label=r"within-$O$ tier spread $h$")
     ax[2].errorbar(cs,y-.12,xerr=[cs-slo,shi-cs],fmt="D",ms=3.2,mfc="white",color=CB[3],
                    lw=.8,capsize=2,label=r"break-even $c_R^{*}$")
     ax[2].errorbar(c,y+.12,xerr=[c-clo,chi-c],fmt="o",ms=3.5,color=CB[1],

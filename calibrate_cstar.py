@@ -60,10 +60,66 @@ def calibrate(g, depth, protein, threshold, k=3):
                          n_proteins=len(members), depth_min=int(members.depth.min()),
                          depth_max=int(members.depth.max())))
     h = max(abs(r['effect'] - do) for r in rows)
+    # SD-based alternative: negative-weighted RMS deviation of tier effects from
+    # Delta_O; less driven by a single extreme tier than the maximum.
+    sd = float(np.sqrt(sum(r['n_neg'] * (r['effect'] - do) ** 2 for r in rows)
+                       / sum(r['n_neg'] for r in rows)))
     c, cstar = abs(du - do), abs(do) / W
-    return dict(W_R=W, delta_O=do, delta_U=du, c=c, c_star=cstar, h=h,
+    return dict(W_R=W, delta_O=do, delta_U=du, c=c, c_star=cstar, h=h, sd=sd,
                 n_tiers=len(rows), c_star_over_h=cstar / h if h > 0 else np.inf,
-                c_over_h=c / h if h > 0 else np.inf, delta_R=float(g.mean())), rows
+                c_over_h=c / h if h > 0 else np.inf,
+                c_star_over_sd=cstar / sd if sd > 0 else np.inf,
+                c_over_sd=c / sd if sd > 0 else np.inf, delta_R=float(g.mean())), rows
+
+
+def bootstrap_scale(m, depth, threshold, reps, rng, ks=(2, 3, 4), chunk=100, score='y_pred'):
+    """Protein bootstrap of h, sd, c and c* with tiers held at their original assignment.
+
+    The draws reproduce bootstrap_effects.bootstrap_pair exactly when called with
+    the same generator state, so replicates pair with Extended Data Table 2.
+    """
+    from bootstrap_effects import weighted_contribution
+    neg = m.y.to_numpy() == 0
+    pos = ~neg
+    proteins, index = np.unique(m.protein.to_numpy(), return_inverse=True)
+    obs = depth[neg] >= threshold
+    pobs = m.loc[neg, 'protein'].to_numpy()[obs]
+    tiers = {k: depth_tiers(pobs, depth[neg][obs], k)[0] for k in ks}
+    ps_b, ps_a = m.loc[pos, score + '_base'].to_numpy(float), m.loc[pos, score + '_aug'].to_numpy(float)
+    ns_b, ns_a = m.loc[neg, score + '_base'].to_numpy(float), m.loc[neg, score + '_aug'].to_numpy(float)
+    out = {key: [] for key in ['c', 'c_star'] + [f'{v}_{k}' for k in ks for v in ('h', 'sd')]}
+    done = 0
+    while done < reps:
+        r = min(chunk, reps - done)
+        counts = rng.multinomial(len(proteins), np.full(len(proteins), 1 / len(proteins)), size=r)
+        weight = counts[:, index].astype(float)
+        wpos, wneg = weight[:, pos], weight[:, neg]
+        g = (weighted_contribution(ps_a, ns_a, wpos) - weighted_contribution(ps_b, ns_b, wpos))
+        wo, wu = wneg * obs, wneg * ~obs
+        so, su = wo.sum(1), wu.sum(1)
+        with np.errstate(invalid='ignore', divide='ignore'):
+            do = (wo * g).sum(1) / so
+            du = np.where(su > 0, (wu * g).sum(1) / np.where(su > 0, su, 1), do)
+            W = su / (so + su)
+            out['c'].append(np.abs(du - do))
+            out['c_star'].append(np.abs(do) / W)
+            go, wk = g[:, obs], wneg[:, obs]
+            for k in ks:
+                eff, num = [], []
+                for t in np.unique(tiers[k]):
+                    sel = tiers[k] == t
+                    nt = wk[:, sel].sum(1)
+                    eff.append((wk[:, sel] * go[:, sel]).sum(1) / nt)
+                    num.append(nt)
+                eff, num = np.array(eff), np.array(num)
+                dev = np.where(num > 0, np.abs(eff - do), -np.inf)   # empty tiers drop out
+                out[f'h_{k}'].append(dev.max(axis=0))
+                out[f'sd_{k}'].append(np.sqrt((num * np.nan_to_num(eff - do) ** 2).sum(0) / num.sum(0)))
+        done += r
+    res = {key: np.concatenate(v) for key, v in out.items()}
+    for v in res.values():
+        v[~np.isfinite(v)] = np.nan   # replicates that drew no observed-region protein
+    return res
 
 
 def main(args):
@@ -100,7 +156,32 @@ def main(args):
                                              'c_star_over_h', 'c_over_h', 'delta_R']].mean()
     summary['h_min'] = e.groupby('task', sort=False).h.min()
     summary['h_max'] = e.groupby('task', sort=False).h.max()
+    for col in ['sd', 'c_star_over_sd', 'c_over_sd']:
+        summary[col] = e.groupby('task', sort=False)[col].mean()
     summary.reset_index().to_csv(prefix + '_summary.tsv', sep='\t', index=False, float_format='%.6g')
+    if args.reps:
+        boot_rows = []
+        rng = np.random.default_rng(args.seed)   # same stream as bootstrap_effects.py
+        for task in TASKS:
+            draws = []
+            for split in range(args.splits):
+                m, _ = paired_predictions(root, task, 'esm2', split, 'replica', 'rebuilt')
+                dep = m.protein.map(depths[task]).fillna(0).to_numpy(int)
+                draws.append(bootstrap_scale(m, dep, args.threshold, args.reps, rng))
+            row = dict(task=task, reps=args.reps)
+            for k in (2, 3, 4):
+                for name, num, den in [('h', None, f'h_{k}'), ('c_over_h', 'c', f'h_{k}'),
+                                       ('c_star_over_h', 'c_star', f'h_{k}'), ('sd', None, f'sd_{k}'),
+                                       ('c_over_sd', 'c', f'sd_{k}'), ('c_star_over_sd', 'c_star', f'sd_{k}')]:
+                    if num is None:
+                        v = np.mean([d[den] for d in draws], axis=0)
+                    else:   # mean over splits of split-specific ratios, as in the summary
+                        v = np.mean([d[num] / d[den] for d in draws], axis=0)
+                    lo, hi = np.nanpercentile(v, [2.5, 97.5])
+                    row[f'{name}_{k}_lo'], row[f'{name}_{k}_hi'] = float(lo), float(hi)
+            boot_rows.append(row)
+            print(task, 'bootstrap complete', flush=True)
+        pd.DataFrame(boot_rows).to_csv(prefix + '_bootstrap.tsv', sep='\t', index=False, float_format='%.6g')
     print(summary.to_string(float_format=lambda x: f'{x:.4f}'))
     sens = rf[rf.score == 'y_pred'].groupby(['task', 'k'], sort=False).c_star_over_h.mean().unstack()
     print('c*/h by number of tiers:')
@@ -124,7 +205,30 @@ def self_test():
     assert vals['h'] < 1e-12 and abs(vals['c_star'] - .05 / (30 / 51)) < 1e-12
     # Unit-weight effects agree with the scope_reanalysis identity.
     assert abs(vals['delta_R'] - ((1 - vals['W_R']) * vals['delta_O'] + vals['W_R'] * vals['delta_U'])) < 1e-12
-    print('calibrate_cstar self-tests: 3 passed')
+    # Bootstrap: unit weights reproduce the point calibration, and the draws pair
+    # with bootstrap_effects.bootstrap_pair under the same generator state.
+    from bootstrap_effects import bootstrap_pair
+    n = 400
+    prot = np.array(['p%d' % (i % 37) for i in range(n)])
+    pdepth = {f'p{i}': (i * 7) % 40 for i in range(37)}
+    y = (rng.random(n) < .3).astype(int)
+    m = pd.DataFrame({'protein': prot, 'y': y,
+                      'y_pred_base': rng.random(n) + .4 * y, 'y_pred_aug': rng.random(n) + .5 * y})
+    dep = np.array([pdepth[q] for q in prot])
+    class Ones:
+        def multinomial(self, n, p, size):
+            return np.ones((size, len(p)), int)
+    b = bootstrap_scale(m, dep, 10, 3, Ones(), ks=(3,))
+    neg = y == 0
+    g = (negative_contribution(m.y_pred_aug[~neg], m.y_pred_aug[neg])
+         - negative_contribution(m.y_pred_base[~neg], m.y_pred_base[neg]))
+    v, _ = calibrate(g, dep[neg], prot[neg], 10, 3)
+    np.testing.assert_allclose([b['h_3'][0], b['sd_3'][0], b['c'][0], b['c_star'][0]],
+                               [v['h'], v['sd'], v['c'], v['c_star']], rtol=1e-12)
+    a = bootstrap_scale(m, dep, 10, 150, np.random.default_rng(5), ks=(3,))
+    e = bootstrap_pair(m, dep, 10, 150, np.random.default_rng(5))
+    np.testing.assert_allclose(a['c'], e['c']); np.testing.assert_allclose(a['c_star'], e['c_star'])
+    print('calibrate_cstar self-tests: 5 passed')
 
 
 if __name__ == '__main__':
@@ -134,6 +238,8 @@ if __name__ == '__main__':
     ap.add_argument('--out', default='results_calibration')
     ap.add_argument('--splits', type=int, default=3)
     ap.add_argument('--threshold', type=int, default=10)
+    ap.add_argument('--reps', type=int, default=2000, help='0 skips the bootstrap')
+    ap.add_argument('--seed', type=int, default=20261004)
     ap.add_argument('--self-test', action='store_true')
     a = ap.parse_args()
     self_test() if a.self_test else main(a)

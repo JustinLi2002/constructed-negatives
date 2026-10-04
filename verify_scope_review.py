@@ -55,7 +55,7 @@ def verify(root):
         emp=[v.strip() for v in rows[i+8][1:]]
         q = r[(r.task==row.task)&(r.d_min==0)&(r.score=='y_pred')]
         c_star = (q.delta_O.abs()/q.W_R).mean()  # mean of split-specific break-even values
-        assert emp == [f'{row.W_R:.3f}',f'{row.delta_O:+.4f}',f'{row.c:.4f}',f'{c_star:.4f}',
+        assert emp == [f'{row.W_R:.3f}',f'{row.delta_O:+.4f}',f'{row.delta_U:+.4f}',f'{row.c:.4f}',f'{c_star:.4f}',
                        f'{row.delta_R:+.4f}',f'{row.signed_agreement_count}/3']
     # Consistency check, not evidence: with Delta_U < Delta_O in every run, c < c*
     # is algebraically the same event as sign persistence.
@@ -91,7 +91,7 @@ def verify(root):
             xml = ET.fromstring(z.read('word/document.xml'))
             tables = xml.findall('.//w:tbl',ns)
             counts = [len(t.findall('w:tr',ns)[0].findall('w:tc',ns)) for t in tables]
-            assert counts == [6,7,5,4,6,5], counts
+            assert counts == [6,8,5,4,6,6,5], counts
             for t,count in zip(tables,counts):
                 assert all(len(row.findall('w:tc',ns))==count for row in t.findall('w:tr',ns))
             comments=ET.fromstring(z.read('word/comments.xml')).findall('w:comment',ns)
@@ -101,7 +101,7 @@ def verify(root):
             assert image_hashes == expected
             body=''.join(xml.itertext())
             assert 'A failed sufficient condition does not override the directly' in body
-        print('DOCX: six physical tables with expected columns, eight comments, and five current figure bitmaps verified.')
+        print('DOCX: seven physical tables with expected columns, eight comments, and five current figure bitmaps verified.')
 
 
 if __name__=='__main__':
