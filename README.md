@@ -37,6 +37,7 @@ pandas 2.2.2, SciPy 1.13.1, scikit-learn 1.5.1 and Matplotlib 3.9.2.
 python prediction_files.py --self-test
 python scope_reanalysis.py --self-test
 python bootstrap_effects.py --self-test
+python calibrate_cstar.py --self-test
 python support_unit_audit.py --self-test
 python verify_scope_review.py
 python support_unit_audit.py
@@ -101,6 +102,7 @@ positive graph is not supplied here.
 | `threshold_tradeoff.py` | Contamination sensitivity, ED Fig. 2c | Rebuilt sites and external `fn_sensitivity.py` |
 | `reversal_bound.py` | Identity (2) and reversal threshold on STRING ≥700, three seeds (`results_reversal_bound.txt`); helpers imported by `shift_check.py` | Edge list; includes model fitting |
 | `bootstrap_effects.py` | Protein bootstrap intervals for Table 1(C), ED Table 2 (`results_bootstrap_means.tsv`, `results_bootstrap_splits.tsv`) | Rebuilt sites and 48 prediction files; CPU, a few minutes |
+| `calibrate_cstar.py` | Within-O depth-tier scale *h* for the break-even difference, Fig. 2c (`results_calibration_summary.tsv`, `_runs.tsv`, `_tiers.tsv`; two to four tiers) | Rebuilt sites and 48 prediction files; CPU, about a minute |
 | `make_figures.py` | All five PNGs | Saved tables; seconds |
 | `verify_scope_review.py` | Numeric/provenance/Table 1 checks | Saved outputs; seconds |
 
@@ -116,6 +118,7 @@ PTM_AUDIT_BASE=/path/to/HRP python deployment_scope.py
 python shift_check_ptm.py --root /path/to/HRP/pdisjoint_runs_v2 --data /path/to/HRP/rebuilt --out results_shift_review.tsv
 python metric_linearity.py --root /path/to/HRP/pdisjoint_runs_v2 --data /path/to/HRP/rebuilt > results_metric_review.txt
 python bootstrap_effects.py --base /path/to/HRP --out results_bootstrap
+python calibrate_cstar.py --base /path/to/HRP --out results_calibration
 ```
 
 Table 1 averages three separately evaluated split-specific ensemble statistics.

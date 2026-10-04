@@ -57,9 +57,17 @@ def verify(root):
         c_star = (q.delta_O.abs()/q.W_R).mean()  # mean of split-specific break-even values
         assert emp == [f'{row.W_R:.3f}',f'{row.delta_O:+.4f}',f'{row.c:.4f}',f'{c_star:.4f}',
                        f'{row.delta_R:+.4f}',f'{row.signed_agreement_count}/3']
-    # Break-even check: in every run, c < c* exactly when the observed sign persists.
+    # Consistency check, not evidence: with Delta_U < Delta_O in every run, c < c*
+    # is algebraically the same event as sign persistence.
     z = r[r.d_min==0]
+    assert (z.delta_U < z.delta_O).all()
     assert ((z.c < z.delta_O.abs()/z.W_R) == (z.delta_O*z.delta_R > 0)).all()
+    # calibrate_cstar.py recomputes c and c* independently of scope_reanalysis.py.
+    cal = pd.read_csv(root/'results_calibration_summary.tsv', sep='\t')
+    for row in cal.itertuples():
+        q = r[(r.task==row.task)&(r.d_min==0)&(r.score=='y_pred')]
+        assert abs(q.c.mean()-row.c) < 1e-5, row.task
+        assert abs((q.delta_O.abs()/q.W_R).mean()-row.c_star) < 1e-5, row.task
     p = pd.read_csv(root/'results_support_unit.tsv',sep='\t')
     from support_unit_audit import audit
     for row in p.itertuples():

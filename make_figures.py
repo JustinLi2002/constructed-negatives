@@ -40,6 +40,16 @@ W_DEPLOY = {t: value(t, "W_reference") for t in TASKS}
 DELTA_O_BENCH = {t: value(t, "delta_bench_legacy") for t in TASKS}
 SCOPE = {t: (int(value(t, "d_min_A")), value(t, "A_pct")) for t in TASKS}
 SCOPE_SCENARIO = {t: value(t, "B_scenario_pct") for t in TASKS}
+# Protein bootstrap intervals for the split means (bootstrap_effects.py) and the
+# within-O depth-tier scale h (calibrate_cstar.py, three tiers).
+with open(os.path.join(RESULT_DIR, "results_bootstrap_means.tsv"), encoding="utf-8") as fh:
+    BOOT = {r["task"]: r for r in csv.DictReader(fh, delimiter="\t")}
+with open(os.path.join(RESULT_DIR, "results_calibration_summary.tsv"), encoding="utf-8") as fh:
+    CALIB = {r["task"]: r for r in csv.DictReader(fh, delimiter="\t")}
+def boot(task, column):
+    return float(BOOT[TASK_KEYS[task]][column])
+def calib(task, column):
+    return float(CALIB[TASK_KEYS[task]][column])
 # results_shift_check.txt, r2 = 0.90, STRING physical >= 700
 # (W, unobserved-mass term, within-region shift term)
 SHIFT = [(0.4789, -0.0262, +0.0018), (0.7880, -0.1451, +0.0001),
@@ -168,10 +178,13 @@ def figure2():
     y=np.arange(len(TASKS))
     do=np.array([value(t,"delta_O") for t in TASKS])
     dr=np.array([value(t,"delta_R") for t in TASKS])
-    lo=np.array([value(t,"delta_R_min") for t in TASKS])
-    hi=np.array([value(t,"delta_R_max") for t in TASKS])
+    lo=np.array([boot(t,"delta_R_lo") for t in TASKS])
+    hi=np.array([boot(t,"delta_R_hi") for t in TASKS])
+    olo=np.array([boot(t,"delta_O_lo") for t in TASKS])
+    ohi=np.array([boot(t,"delta_O_hi") for t in TASKS])
     for i in y:ax[1].plot([do[i],dr[i]],[i,i],color=".7",lw=.8)
-    ax[1].plot(do,y,"s",ms=3.5,color=CB[0],label=r"observed region $O_R$")
+    ax[1].errorbar(do,y,xerr=[do-olo,ohi-do],fmt="s",ms=3.5,color=CB[0],
+                   lw=.8,capsize=2,label=r"observed region $O_R$")
     ax[1].errorbar(dr,y,xerr=[dr-lo,hi-dr],fmt="o",ms=3.5,color=CB[1],
                    lw=.8,capsize=2,label="all reconstructed negatives")
     ax[1].axvline(0,color=".4",ls=":",lw=.8)
@@ -180,15 +193,20 @@ def figure2():
     ax[1].set_title("b   measured on reconstruction R",loc="left",fontsize=8)
     ax[1].legend(frameon=False,fontsize=5.8,loc="upper left",bbox_to_anchor=(-.15,-.27))
 
-    ax[2].barh(y-.16,[SCOPE[t][1] for t in TASKS],height=.30,color=CB[0],
-               label="(A) half-mass screen")
-    ax[2].barh(y+.16,[SCOPE_SCENARIO[t] for t in TASKS],height=.30,color=CB[3],
-               label="(B) zero-shift scenario")
-    for i,t in enumerate(TASKS):
-        ax[2].text(SCOPE[t][1]+1.3,i-.16,str(SCOPE[t][0]),fontsize=6,va="center")
+    c=np.array([value(t,"c") for t in TASKS])
+    clo=np.array([boot(t,"c_lo") for t in TASKS]); chi=np.array([boot(t,"c_hi") for t in TASKS])
+    cs=np.array([calib(t,"c_star") for t in TASKS])
+    slo=np.array([boot(t,"c_star_lo") for t in TASKS]); shi=np.array([boot(t,"c_star_hi") for t in TASKS])
+    h=np.array([calib(t,"h") for t in TASKS])
+    ax[2].plot(h,y,"|",ms=7,mew=1.2,color=".55",label=r"within-$O$ tier spread $h$")
+    ax[2].errorbar(cs,y-.12,xerr=[cs-slo,shi-cs],fmt="D",ms=3.2,mfc="white",color=CB[3],
+                   lw=.8,capsize=2,label=r"break-even $c_R^{*}$")
+    ax[2].errorbar(c,y+.12,xerr=[c-clo,chi-c],fmt="o",ms=3.5,color=CB[1],
+                   lw=.8,capsize=2,label=r"measured $c_R$")
+    ax[2].set_xscale("log");ax[2].set_xlim(.004,.6)
     ax[2].set_yticks(y);ax[2].set_yticklabels([]);ax[2].invert_yaxis()
-    ax[2].set_xlim(0,80);ax[2].set_xlabel("reference proteins retained (%)")
-    ax[2].set_title("c   conditional scope screens",loc="left",fontsize=8)
+    ax[2].set_xlabel("regional difference (AUROC)")
+    ax[2].set_title("c   difference versus break-even",loc="left",fontsize=8)
     ax[2].legend(frameon=False,fontsize=5.8,loc="upper left",bbox_to_anchor=(-.15,-.27))
     fig.tight_layout(w_pad=1.0)
     fig.savefig(f"{OUT}/fig2_identified.png")
