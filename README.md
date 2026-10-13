@@ -103,11 +103,21 @@ positive graph is not supplied here.
 | `reversal_bound.py` | Identity (2) and reversal threshold on STRING ≥700, three seeds (`results_reversal_bound.txt`); helpers imported by `shift_check.py` | Edge list; includes model fitting |
 | `bootstrap_effects.py` | Protein bootstrap intervals for Table 1(C), ED Table 2 (`results_bootstrap_means.tsv`, `results_bootstrap_splits.tsv`) | Rebuilt sites and 48 prediction files; CPU, a few minutes |
 | `calibrate_cstar.py` | Within-O depth-tier scale *h* (and an RMS alternative) for the break-even difference, with a protein bootstrap paired to `bootstrap_effects.py`; Fig. 2c, ED Table 3 (`results_calibration_summary.tsv`, `_runs.tsv`, `_tiers.tsv`, `_bootstrap.tsv`; two to four tiers) | Rebuilt sites and 48 prediction files; CPU, several minutes |
+| `recsys_kcore_scope.py` | Five-core recommendation benchmarks: recomputes each Amazon Reviews 2023 five-core from the unfiltered release, checks it against the published one, and reports *W*, *d_min* and retained shares (`results_recsys_kcore.tsv`, ED Table 4) | Public 0-core and 5-core rating-only files (download separately); CPU, minutes |
 | `make_figures.py` | All six PNGs, including the depth profile (ED Fig. 3) recovered from the archived depth scan | Saved tables; seconds |
 | `verify_scope_review.py` | Numeric/provenance/Table 1 checks | Saved outputs; seconds |
 
 Full external-data runtimes have not been benchmarked consistently. A
 synthetic-sweep runtime should not be interpreted as a graph-processing time.
+
+## Recompute the recommendation analysis
+
+Download the rating-only benchmark files into `<dir>/0core/` and `<dir>/5core/` from
+`https://mcauleylab.ucsd.edu/public_datasets/data/amazon_2023/benchmark/{0core,5core}/rating_only/<Category>.csv.gz`, then
+
+```sh
+python recsys_kcore_scope.py <dir> results_recsys_kcore.tsv Magazine_Subscriptions Gift_Cards All_Beauty Musical_Instruments CDs_and_Vinyl Software Video_Games Industrial_and_Scientific Baby_Products
+```
 
 ## Recompute PTM analyses
 
