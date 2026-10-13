@@ -76,12 +76,17 @@ def main(data_dir, out, cats):
     for c in cats:
         users, items, eu, ei, nraw = load_pairs(D / "0core" / f"{c}.csv.gz")
         cu, ci = core_numbers(len(users), len(items), eu, ei)
-        ou, oi, oeu, _, _ = load_pairs(D / "5core" / f"{c}.csv.gz")
+        ou, oi, oeu, oei, _ = load_pairs(D / "5core" / f"{c}.csv.gz")
         inv_u, inv_i = list(users), list(items)          # dict order = integer id
         ours_u = {inv_u[x] for x in np.flatnonzero(cu >= T)}
         ours_i = {inv_i[x] for x in np.flatnonzero(ci >= T)}
         M = {d: mass(d, cu, ci, eu, ei) for d in range(1, T + 1)}
-        match = ours_u == set(ou) and ours_i == set(oi) and M[T][3] == len(oeu)
+        # the published five-core must equal ours as sets of users, items and (user, item) pairs
+        keep = (cu[eu] >= T) & (ci[ei] >= T)
+        our_pairs = {(inv_u[u], inv_i[i]) for u, i in zip(eu[keep].tolist(), ei[keep].tolist())}
+        inv_ou, inv_oi = list(ou), list(oi)
+        off_pairs = {(inv_ou[u], inv_oi[i]) for u, i in zip(oeu.tolist(), oei.tolist())}
+        match = ours_u == set(ou) and ours_i == set(oi) and our_pairs == off_pairs
         assert match, f"{c}: recomputed 5-core differs from the official release"
         obs = M[T][0]
         W_d = {d: (M[d][0] - obs) / M[d][0] for d in range(1, T + 1)}
