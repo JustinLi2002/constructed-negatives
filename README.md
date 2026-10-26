@@ -1,6 +1,6 @@
 # Constructed negatives determine the population a benchmark can rank over
 
-Analysis code for Paper 2, using reconstructed data and predictions from
+Analysis code for Paper, using reconstructed data and predictions from
 [`ptm-audit`](https://github.com/JustinLi2002/ptm-audit). License: **MIT**.
 The development repository remains private during revision. This checkout
 does not constitute a public release or a new Paper 2 Zenodo snapshot.
