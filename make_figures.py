@@ -15,12 +15,13 @@ from collections import defaultdict
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.ticker
 import numpy as np
 
 OUT = os.environ.get("FIGURE_OUT", "figures")
 RESULT_DIR = os.environ.get("SCOPE_RESULT_DIR", ".")
 os.makedirs(OUT, exist_ok=True)
-plt.rcParams.update({"font.size": 7, "axes.linewidth": 0.6,
+plt.rcParams.update({"font.size": 8, "axes.linewidth": 0.6,
                      "xtick.major.width": 0.6, "ytick.major.width": 0.6,
                      "axes.spines.top": False, "axes.spines.right": False,
                      "figure.dpi": 200, "savefig.bbox": "tight"})
@@ -94,37 +95,38 @@ def figure1():
 
     Panel a is the only invented panel in these figures; b and c are measured.
     """
-    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.8))
+    fig, ax = plt.subplots(1, 3, figsize=(7.2, 3.1))
 
     d = np.linspace(0, 25, 400)
     T = 10
     viol = np.where(d >= T, 0.85, 0.0)
     shift = 0.9 * np.exp(-0.12 * (25 - d)) + 0.02
-    ax[0].plot(d, shift, lw=1.4, color=CB[0], label="covariate shift")
-    ax[0].plot(d, viol, lw=1.6, color=CB[1], label="positivity violation")
+    ax[0].plot(d, shift, lw=1.4, color=CB[0], label="positive probability")
+    ax[0].plot(d, viol, lw=1.6, color=CB[1], label="zero below threshold")
     ax[0].axvline(T, color="0.5", lw=0.8, ls=":")
     ax[0].fill_between(d, 0, 1.0, where=(d < T), color=CB[1], alpha=0.07)
-    ax[0].text(T + 0.5, 0.06, "$T$", fontsize=7, color="0.35")
-    ax[0].annotate("no negatives\ndrawn here", xy=(4.5, 0.30),
-                   fontsize=6, color=CB[1], ha="center")
+    ax[0].text(T + 0.5, 0.06, "$T$", fontsize=7.5, color="0.35")
+    ax[0].annotate("no\nnegatives\ndrawn", xy=(4.8, 0.30),
+                   fontsize=7.2, color=CB[1], ha="center")
     ax[0].set_ylim(-0.03, 1.05)
     ax[0].set_xlabel("annotation depth")
     ax[0].set_ylabel("negative-sampling probability")
-    ax[0].set_title("a   two ways to distort a benchmark", loc="left",
-                    fontsize=8)
-    ax[0].legend(frameon=False, fontsize=6, loc="upper left")
+    ax[0].set_title("a   sampling support", loc="left",
+                    fontsize=8.5)
+    ax[0].legend(frameon=False, fontsize=7.2, loc="lower left",
+                 bbox_to_anchor=(0.0, -0.50), ncol=1, handlelength=1.2)
 
     y = np.arange(len(TASKS))
     ax[1].barh(y, [W_DEPLOY[t] for t in TASKS], height=0.60,
-               color=CB[1], label="whole proteome")
+               color=CB[1], label="reference proteome")
     ax[1].axvline(0.5, color="0.4", lw=0.9, ls="--")
     ax[1].set_yticks(y)
-    ax[1].set_yticklabels(TASKS, fontsize=6)
+    ax[1].set_yticklabels(TASKS, fontsize=7.2)
     ax[1].invert_yaxis()
     ax[1].set_xlim(0, 1.05)
-    ax[1].set_xlabel("unobserved weight $W$")
-    ax[1].set_title("b   deployment mass never sampled", loc="left", fontsize=8)
-    ax[1].legend(frameon=False, fontsize=5.5, loc="lower left",
+    ax[1].set_xlabel("excluded weight $W$")
+    ax[1].set_title("b   excluded negative mass", loc="left", fontsize=8.5)
+    ax[1].legend(frameon=False, fontsize=7.2, loc="lower left",
                  bbox_to_anchor=(0.0, -0.50), ncol=2, handlelength=1.2,
                  columnspacing=1.0)
 
@@ -133,21 +135,21 @@ def figure1():
     shiftt = [abs(r[2]) for r in SHIFT]
     x = np.arange(len(W))
     ax[2].bar(x, unobs, width=0.5, color=CB[1],
-              label="unobserved mass, unreachable")
+              label="excluded-region term")
     ax[2].bar(x, shiftt, width=0.5, bottom=unobs, color=CB[0],
-              label="shift inside O, repairable")
+              label="within-O shift")
     for i, (u, sh) in enumerate(zip(unobs, shiftt)):
         ax[2].text(i, u + sh + 0.012, "%.1f%%" % (100 * sh / (u + sh)),
-                   ha="center", fontsize=5.5, color=CB[0])
+                   ha="center", fontsize=7.2, color=CB[0])
     ax[2].set_xticks(x)
     ax[2].set_xticklabels(["%.2f" % w for w in W])
     ax[2].set_ylim(0, 0.36)
-    ax[2].set_xlabel("unobserved weight $W$")
-    ax[2].set_ylabel("|contribution to the error|")
-    ax[2].set_title("c   which half is repairable", loc="left", fontsize=8)
+    ax[2].set_xlabel("excluded weight $W$")
+    ax[2].set_ylabel("|AUROC difference term|")
+    ax[2].set_title("c   two contributions to the difference", loc="left", fontsize=8.5)
     # the blue segment is invisible at this scale, which is the point; the
     # percentages label it
-    ax[2].legend(frameon=False, fontsize=5.5, loc="lower left",
+    ax[2].legend(frameon=False, fontsize=7.2, loc="lower left",
                  bbox_to_anchor=(0.0, -0.50), ncol=1, handlelength=1.2)
 
     fig.tight_layout()
@@ -159,7 +161,7 @@ def figure1():
 # ---------------------------------------------------------------- figure 2
 def figure2():
     """Distinct scales: reference support, empirical effects, conditional scope."""
-    fig, ax = plt.subplots(1, 3, figsize=(7.2, 3.15), gridspec_kw={"width_ratios":[1,1.35,1]})
+    fig, ax = plt.subplots(1, 3, figsize=(7.2, 3.5), gridspec_kw={"width_ratios":[1,1.35,1]})
     w=np.linspace(.01,.985,400)
     ax[0].plot(w,w/(1-w),color=".25",lw=1.2)
     ax[0].axhline(1,color=CB[1],lw=.8,ls="--")
@@ -173,9 +175,9 @@ def figure2():
     ax[0].set_yscale("log")
     ax[0].set_xlabel("reference weight $W$")
     ax[0].set_ylabel("gap threshold $W/(1-W)$")
-    ax[0].set_title("a   unrestricted bound",loc="left",fontsize=8)
-    ax[0].text(.03,30,"maximum gap = 1",color=CB[1],fontsize=6)
-    ax[0].legend(frameon=False,fontsize=5.8,loc="upper left",bbox_to_anchor=(-.15,-.27))
+    ax[0].set_title("a   unrestricted bound",loc="left",fontsize=8.5)
+    ax[0].text(.03,30,"maximum gap = 1",color=CB[1],fontsize=7.2)
+    ax[0].legend(frameon=False,fontsize=7.2,loc="upper left",bbox_to_anchor=(-.15,-.27))
 
     y=np.arange(len(TASKS))
     do=np.array([value(t,"delta_O") for t in TASKS])
@@ -186,14 +188,14 @@ def figure2():
     ohi=np.array([boot(t,"delta_O_hi") for t in TASKS])
     for i in y:ax[1].plot([do[i],dr[i]],[i,i],color=".7",lw=.8)
     ax[1].errorbar(do,y,xerr=[do-olo,ohi-do],fmt="s",ms=3.5,color=CB[0],
-                   lw=.8,capsize=2,label=r"observed region $O_R$")
+                   lw=.8,capsize=2,label=r"eligible region $O_R$")
     ax[1].errorbar(dr,y,xerr=[dr-lo,hi-dr],fmt="o",ms=3.5,color=CB[1],
                    lw=.8,capsize=2,label="all reconstructed negatives")
     ax[1].axvline(0,color=".4",ls=":",lw=.8)
-    ax[1].set_yticks(y);ax[1].set_yticklabels(TASKS,fontsize=6.1)
+    ax[1].set_yticks(y);ax[1].set_yticklabels(TASKS,fontsize=7.2)
     ax[1].invert_yaxis();ax[1].set_xlabel("augmentation AUROC effect")
-    ax[1].set_title("b   measured on reconstruction R",loc="left",fontsize=8)
-    ax[1].legend(frameon=False,fontsize=5.8,loc="upper left",bbox_to_anchor=(-.15,-.27))
+    ax[1].set_title("b   measured on reconstruction R",loc="left",fontsize=8.5)
+    ax[1].legend(frameon=False,fontsize=7.2,loc="upper left",bbox_to_anchor=(-.15,-.27))
 
     c=np.array([value(t,"c") for t in TASKS])
     clo=np.array([boot(t,"c_lo") for t in TASKS]); chi=np.array([boot(t,"c_hi") for t in TASKS])
@@ -211,8 +213,8 @@ def figure2():
     ax[2].set_xscale("log");ax[2].set_xlim(.004,.6)
     ax[2].set_yticks(y);ax[2].set_yticklabels([]);ax[2].invert_yaxis()
     ax[2].set_xlabel("regional difference (AUROC)")
-    ax[2].set_title("c   difference versus break-even",loc="left",fontsize=8)
-    ax[2].legend(frameon=False,fontsize=5.8,loc="upper left",bbox_to_anchor=(-.15,-.27))
+    ax[2].set_title("c   difference versus break-even",loc="left",fontsize=8.5)
+    ax[2].legend(frameon=False,fontsize=7.2,loc="upper left",bbox_to_anchor=(-.15,-.27))
     fig.tight_layout(w_pad=1.0)
     fig.savefig(f"{OUT}/fig2_identified.png")
     plt.close(fig)
@@ -236,7 +238,7 @@ def figure3():
         v = [float(r[key]) for r in by[T] if r[key] not in ("", "nan")]
         return float(np.mean(v)) if v else np.nan
 
-    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.3))
+    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.6))
     # both are upper bounds, so they are comparable; the two-sided cond
     # interval is a different object and is not what the text quotes
     for key, lab, col in (("naive_valid", "endpoint, direction assumed", CB[1]),
@@ -246,25 +248,25 @@ def figure3():
     ax[0].set_xlabel("donor threshold $T$")
     ax[0].set_ylabel("% of replicates the bound holds")
     ax[0].set_ylim(-4, 104)
-    ax[0].set_title("a   validity", loc="left", fontsize=8)
-    ax[0].legend(frameon=False, fontsize=6, loc="lower center")
+    ax[0].set_title("a   validity", loc="left", fontsize=8.5)
+    ax[0].legend(frameon=False, fontsize=7.2, loc="upper left", bbox_to_anchor=(-0.05, -0.30))
 
     ax[1].plot(Ts, [share(T, "w_unobs") for T in Ts], "o-", ms=3.5, lw=1.2,
                color="0.25")
     ax[1].axhline(0.5, color=CB[1], lw=0.8, ls=":")
     ax[1].set_xlabel("donor threshold $T$")
-    ax[1].set_ylabel("unobserved weight $W$")
-    ax[1].set_title("b   mass lost", loc="left", fontsize=8)
+    ax[1].set_ylabel("excluded weight $W$")
+    ax[1].set_title("b   mass lost", loc="left", fontsize=8.5)
 
     nobs = [share(T, "n_obs") for T in Ts]
     ax[2].bar([str(T) for T in Ts], nobs, color=CB[0], width=0.6)
     ax[2].axhline(2, color=CB[1], lw=0.8, ls="--")
     ax[2].axhline(3, color=CB[3], lw=0.8, ls=":")
-    ax[2].text(0.1, 2.15, "slope needs 2", color=CB[1], fontsize=5.5)
-    ax[2].text(0.1, 3.15, "curvature needs 3", color=CB[3], fontsize=5.5)
+    ax[2].text(4.45, 2.15, "slope needs 2", color=CB[1], fontsize=7.2, ha="right")
+    ax[2].text(4.45, 3.15, "curvature needs 3", color=CB[3], fontsize=7.2, ha="right")
     ax[2].set_xlabel("donor threshold $T$")
     ax[2].set_ylabel("strata the benchmark supplies")
-    ax[2].set_title("c   resolution", loc="left", fontsize=8)
+    ax[2].set_title("c   resolution", loc="left", fontsize=8.5)
 
     fig.tight_layout()
     fig.savefig(f"{OUT}/fig3_restrictions.png")
@@ -273,9 +275,12 @@ def figure3():
 
 
 # ---------------------------------------------------------------- figure 4
+ZERO_ROW = 1e-7   # where Fig. 3 draws values that are exactly zero
+
+
 def figure4():
     """The rule, not the domain: propensity by degree, and the moving cut."""
-    fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.5))
+    fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.8))
     for i, (net, lab) in enumerate(NETS):
         for tag, style, a in (("cl3", "--", 0), ("cl3full", "-", 1)):
             p = find(f"clusterC/results_uniform/{tag}_{net}_by_degree.tsv",
@@ -287,26 +292,37 @@ def figure4():
             rows = read_tsv(p)
             x = np.arange(len(rows))
             y = [float(r["propensity"]) for r in rows]
-            ax[a].plot(x, np.maximum(y, 1e-6), style, marker="o", ms=2.5,
+            y = np.array(y)
+            nz = y > 0                      # exact zeros: degree above the prefilter cutoff
+            ax[a].plot(x[nz], y[nz], style, marker="o", ms=2.5,
                        lw=1.1, color=CB[i], label=lab if a == 1 else None)
+            if (~nz).any():
+                ax[a].plot(x[~nz] + (i - 1.5) * 0.13, np.full((~nz).sum(), ZERO_ROW), "o", ms=3.2, mfc="white",
+                           mew=0.9, color=CB[i], zorder=3 + i)
             if a == 1:
                 ax[a].set_xticks(x)
                 ax[a].set_xticklabels([r["stratum"] for r in rows],
-                                      rotation=45, fontsize=5.5)
+                                      rotation=45, fontsize=7.2)
             else:
                 ax[a].set_xticks(x)
                 ax[a].set_xticklabels([r["stratum"] for r in rows],
-                                      rotation=45, fontsize=5.5)
+                                      rotation=45, fontsize=7.2)
     for a, ttl in ((0, "a   Contrastive-L3 alone"),
                    (1, "b   with the configuration-model prefilter")):
         ax[a].set_yscale("log")
-        ax[a].set_ylim(5e-7, 2)
+        ax[a].set_ylim(ZERO_ROW / 2.5, 2)
+        ax[a].set_yticks([ZERO_ROW] + [10.0 ** k for k in range(-6, 1)])
+        ax[a].set_yticklabels(["0"] + ["$10^{%d}$" % k for k in range(-6, 1)])
+        ax[a].yaxis.set_minor_locator(matplotlib.ticker.NullLocator())
+        # break marks on the y axis between the zero row and the log scale
+        for yy in (ZERO_ROW * 2.0, ZERO_ROW * 2.6):
+            ax[a].plot([-0.012, 0.012], [yy, yy], transform=ax[a].get_yaxis_transform(),
+                       color="k", lw=0.7, clip_on=False)
         ax[a].set_xlabel("protein degree")
-        ax[a].set_title(ttl, loc="left", fontsize=8)
+        ax[a].set_title(ttl, loc="left", fontsize=8.5)
     ax[0].set_ylabel("mean share of eligible partners")
-    ax[1].axhline(1e-6, color="0.4", lw=0.8, ls=":")
-    ax[1].text(4.6, 1.5e-6, "exactly zero", fontsize=6, color="0.3")
-    ax[1].legend(frameon=False, fontsize=6, loc="upper right")
+    ax[1].plot([], [], "o", ms=3.2, mfc="white", mew=0.9, color="0.35", label="exactly zero")
+    ax[1].legend(frameon=False, fontsize=7.2, loc="upper right")
     fig.tight_layout()
     fig.savefig(f"{OUT}/fig4_taxonomy.png")
     plt.close(fig)
@@ -316,7 +332,7 @@ def figure4():
 # ---------------------------------------------------------------- figure 5
 def figure5():
     """The consequence plane, and what the threshold was buying."""
-    fig = plt.figure(figsize=(7.2, 2.4))
+    fig = plt.figure(figsize=(7.2, 2.7))
     gs = fig.add_gridspec(1, 3, width_ratios=[1.5, 1, 1])
     axp = fig.add_subplot(gs[0, 0])
 
@@ -335,21 +351,21 @@ def figure5():
             axp.plot(np.array(xs)[o], np.array(ys)[o], "o-", ms=3.5, lw=1.2,
                      color=CB[i], label=lab)
     axp.axhline(0, color="0.6", lw=0.6)
-    axp.set_xlabel("unobserved weight $W$")
-    axp.set_ylabel("deployment $-$ benchmark")
-    axp.set_title("a   the benchmark's error", loc="left", fontsize=8)
-    axp.legend(frameon=False, fontsize=6, loc="lower left")
+    axp.set_xlabel("excluded weight $W$")
+    axp.set_ylabel("target $-$ benchmark")
+    axp.set_title("a   the benchmark's error", loc="left", fontsize=8.5)
+    axp.legend(frameon=False, fontsize=7.2, loc="lower left")
 
     axc = fig.add_subplot(gs[0, 1])
     y = np.arange(len(TASKS))
     axc.barh(y, [PRC_RESID[t][0] / PRC_RESID[t][1] * 100 for t in TASKS],
              color=CB[1], height=0.6)
     axc.set_yticks(y)
-    axc.set_yticklabels(TASKS, fontsize=5.5)
+    axc.set_yticklabels(TASKS, fontsize=7.2)
     axc.invert_yaxis()
     axc.set_xlabel("AUPRC residual, % of value")
     axc.set_title("b   decomposition fails\n     for AUPRC", loc="left",
-                  fontsize=8)
+                  fontsize=8.5)
 
     axt = fig.add_subplot(gs[0, 2])
     axt.plot(TRADE_T, TRADE_W, "o-", ms=3.5, lw=1.2, color=CB[1],
@@ -358,10 +374,10 @@ def figure5():
              label="false-negative rate")
     axt.axhline(0.5, color="0.6", lw=0.8, ls=":")
     axt.axvline(1, color="0.4", lw=0.8, ls="--")
-    axt.text(1.3, 0.62, "mean $W$ at $T=1$\nexceeds 0.5", fontsize=5.5)
+    axt.text(4, 0.535, "mean $W$ at $T=1$\nexceeds 0.5", fontsize=7.2)
     axt.set_xlabel("donor threshold $T$")
-    axt.set_title("c   what the threshold buys", loc="left", fontsize=8)
-    axt.legend(frameon=False, fontsize=6, loc="center right")
+    axt.set_title("c   what the threshold buys", loc="left", fontsize=8.5)
+    axt.legend(frameon=False, fontsize=7.2, loc="upper left", bbox_to_anchor=(-0.05, -0.30))
 
     fig.tight_layout()
     fig.savefig(f"{OUT}/fig5_consequence.png")
@@ -395,7 +411,7 @@ def figure6():
     """Extended Data: effects by annotation depth on both sides of the threshold."""
     with open(os.path.join(RESULT_DIR, "results_calibration_tiers.tsv"), encoding="utf-8") as fh:
         tiers = [r for r in csv.DictReader(fh, delimiter="\t") if r["score"] == "y_pred" and r["k"] == "3"]
-    fig, axes = plt.subplots(2, 4, figsize=(7.2, 3.6), sharex=True)
+    fig, axes = plt.subplots(2, 4, figsize=(7.2, 4.2), sharex=True)
     for ax, t in zip(axes.ravel(), TASKS):
         key = TASK_KEYS[t]
         prof = depth_profile(key)
@@ -404,23 +420,25 @@ def figure6():
                 for d in depths]
         for s, d, e, _ in prof:
             ax.plot(d, e, ".", ms=2.5, color=CB[1], alpha=.35)
-        ax.plot(depths, mean, "o-", ms=2.8, lw=.9, color=CB[1], label="unsampled depths (R)")
+        ax.plot(depths, mean, "o-", ms=2.8, lw=.9, color=CB[1], label="depths excluded by the donor rule (R)")
         for r in tiers:
             if r["task"] == key:
                 lo, hi = int(r["depth_min"]), int(r["depth_max"])
                 ax.plot([lo, hi], [float(r["effect"])] * 2, color=CB[0], lw=1.1, alpha=.7)
-        ax.plot([], [], color=CB[0], lw=1.1, label="observed depth tiers")
+        ax.plot([], [], color=CB[0], lw=1.1, label="eligible depth tiers")
         ax.axvline(10, color=".4", ls="--", lw=.7)
         ax.axhline(0, color=".6", ls=":", lw=.7)
         ax.set_xscale("log")
-        ax.set_title(t, fontsize=7)
-        ax.tick_params(labelsize=6)
+        ax.set_title(t, fontsize=7.5)
+        ax.tick_params(labelsize=7.2)
     for ax in axes[1]:
-        ax.set_xlabel("annotation depth", fontsize=6.5)
+        ax.set_xlabel("annotation depth", fontsize=7.5)
     for ax in axes[:, 0]:
-        ax.set_ylabel("augmentation effect", fontsize=6.5)
-    axes[0, 0].legend(frameon=False, fontsize=5.5, loc="lower right")
+        ax.set_ylabel("augmentation effect", fontsize=7.5)
+    handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.tight_layout()
+    fig.legend(handles, labels, frameon=False, fontsize=7.2, loc="upper center",
+               bbox_to_anchor=(0.5, 0.0), ncol=2)
     fig.savefig(f"{OUT}/fig6_depth_profile.png")
     plt.close(fig)
     print("fig6_depth_profile.png")
