@@ -1,0 +1,37 @@
+D-SCRIPT 0.3.1
+usage: dscript predict_serial [-h] --pairs PAIRS [--model MODEL] [--seqs SEQS]
+                              [--embeddings EMBEDDINGS]
+                              [--foldseek_fasta FOLDSEEK_FASTA] [-o OUTFILE]
+                              [-d DEVICE] [--store_cmaps] [--thresh THRESH]
+                              [--load_proc LOAD_PROC]
+
+Make new predictions with a pre-trained model using legacy (serial) inference.
+One of --seqs or --embeddings is required.
+
+options:
+  -h, --help            show this help message and exit
+  --pairs PAIRS         Candidate protein pairs to predict
+  --model MODEL         Pretrained Model. If this is a `.sav` or `.pt` file,
+                        it will be loaded. Otherwise, we will try to load
+                        `[model]` from HuggingFace hub [default:
+                        samsl/topsy_turvy_human_v1]
+  --seqs SEQS           Protein sequences in .fasta format
+  --embeddings EMBEDDINGS
+                        h5 file with embedded sequences
+  --foldseek_fasta FOLDSEEK_FASTA
+                        3di sequences in .fasta format. Can be generated using
+                        `dscript extract-3di. Default is None. If provided,
+                        TT3D will be run, otherwise default D-SCRIPT/TT will
+                        be run.
+  -o OUTFILE, --outfile OUTFILE
+                        File for predictions
+  -d DEVICE, --device DEVICE
+                        Compute device to use
+  --store_cmaps         Store contact maps for predicted pairs above
+                        `--thresh` in an h5 file
+  --thresh THRESH       Positive prediction threshold - used to store contact
+                        maps and predictions in a separate file. [default:
+                        0.5]
+  --load_proc LOAD_PROC
+                        Number of processes to use when loading embeddings (-1
+                        = # of CPUs, default=32)

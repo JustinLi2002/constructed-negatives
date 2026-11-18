@@ -1,0 +1,4 @@
+wrapper vs CLI ('toyA', 'toyB'): wrapper 0.00424385 cli 0.00424385 diff 0.00e+00
+wrapper vs CLI ('toyC', 'toyD'): wrapper 0.01672589 cli 0.01672589 diff 0.00e+00
+g1_tt rows 3
+SMOKE OK

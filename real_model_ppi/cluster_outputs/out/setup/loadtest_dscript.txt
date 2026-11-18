@@ -1,0 +1,35 @@
+<HPC_HOME>/realppi/envs/dscript/lib/python3.12/site-packages/torch/serialization.py:1634: SourceChangeWarning: source code of class 'dscript.models.embedding.SkipLSTM' has changed. you can retrieve the original source code by accessing the object's source attribute or set `torch.nn.Module.dump_patches = True` and use the patch tool to revert the changes.
+  warnings.warn(msg, SourceChangeWarning)
+<HPC_HOME>/realppi/envs/dscript/lib/python3.12/site-packages/torch/serialization.py:1634: SourceChangeWarning: source code of class 'torch.nn.modules.dropout.Dropout' has changed. you can retrieve the original source code by accessing the object's source attribute or set `torch.nn.Module.dump_patches = True` and use the patch tool to revert the changes.
+  warnings.warn(msg, SourceChangeWarning)
+<HPC_HOME>/realppi/envs/dscript/lib/python3.12/site-packages/torch/serialization.py:1634: SourceChangeWarning: source code of class 'torch.nn.modules.container.ModuleList' has changed. you can retrieve the original source code by accessing the object's source attribute or set `torch.nn.Module.dump_patches = True` and use the patch tool to revert the changes.
+  warnings.warn(msg, SourceChangeWarning)
+<HPC_HOME>/realppi/envs/dscript/lib/python3.12/site-packages/torch/serialization.py:1634: SourceChangeWarning: source code of class 'torch.nn.modules.rnn.LSTM' has changed. you can retrieve the original source code by accessing the object's source attribute or set `torch.nn.Module.dump_patches = True` and use the patch tool to revert the changes.
+  warnings.warn(msg, SourceChangeWarning)
+{
+ "model": "D-SCRIPT human_v1",
+ "sav_sha256": "1d6b8d458a4c2d481573527541cfa8162cc8eadf9e6db23147074ce30184de38",
+ "dscript": "0.3.1",
+ "torch": "2.7.1+cu126",
+ "python": "3.12.2",
+ "device": "cpu",
+ "gpu": null,
+ "cudnn_allow_tf32": false,
+ "matmul_allow_tf32": false,
+ "host": "<hpc-host>",
+ "pickled_model": {
+  "do_w": true,
+  "do_sigmoid": true,
+  "do_pool": true,
+  "pool_size": null,
+  "use_cuda": false,
+  "theta": 1.0,
+  "lambda_": 0.0,
+  "gamma": 0.0,
+  "class": "dscript.models.interaction.ModelInteraction"
+ },
+ "package_lm_file": "<HPC_HOME>/realppi/envs/dscript/lib/python3.12/site-packages/dscript/dscript_lm_v1.pt",
+ "package_lm_sha256": "b91f32fcd7d68460ca3c3e3bd2396c1f5826a333ad4ad4962b7f4ab3a410b17c",
+ "lm_sav_vs_package_lm": "comparison not possible: AttributeError: 'LSTM' object has no attribute '_flat_weights'",
+ "toy_forward_ok": true
+}

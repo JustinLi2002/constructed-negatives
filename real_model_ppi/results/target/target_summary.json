@@ -1,0 +1,129 @@
+{
+ "seed": 20261118,
+ "source_ratio": 0.064,
+ "length_range": [
+  50,
+  800
+ ],
+ "proteins": 10746,
+ "edges": 86519,
+ "tau": 2,
+ "sequences_missing": 0,
+ "scorable_proteins": 8320,
+ "not_scorable_by_length": 2405,
+ "not_scorable_by_alphabet": 21,
+ "string_proteins_sharing_a_sequence": 131,
+ "tunar_gold_pairs_within_bernett_raw": "231523 of 231523",
+ "released_sequence_pairs": 743780,
+ "released_sequences": 19334,
+ "released_pairs_on_string": 284201,
+ "released_pairs_on_string_that_are_edges": 23555,
+ "released_nonedge_pairs_in_scorable_set": 201048,
+ "unrestricted": {
+  "O": 4334373,
+  "U": 53311993,
+  "W": 0.9248109932896724
+ },
+ "target": {
+  "T": 34347139,
+  "O_T": 2733253,
+  "U_T": 31613886,
+  "W_T": 0.9204226878984011,
+  "eligible_pairs_lost_to_scorability": 1590094,
+  "eligible_scorable_pairs_lost_to_release": 11026
+ },
+ "positives": {
+  "edges_scorable": 58853,
+  "edges_scorable_not_released": 37720,
+  "edges_released": 21133
+ },
+ "u_sampler_draws": 10946,
+ "G2": {
+  "files": {
+   "dscript/human_train.tsv": {
+    "pairs": 421792,
+    "resolved": 421792,
+    "share": 1.0
+   },
+   "dscript/human_test.tsv": {
+    "pairs": 52725,
+    "resolved": 52725,
+    "share": 1.0
+   },
+   "bernett/Intra0_pos_rr.txt": {
+    "pairs": 29630,
+    "resolved": 29630,
+    "share": 1.0
+   },
+   "bernett/Intra0_neg_rr.txt": {
+    "pairs": 29630,
+    "resolved": 29630,
+    "share": 1.0
+   },
+   "bernett/Intra1_pos_rr.txt": {
+    "pairs": 81596,
+    "resolved": 81596,
+    "share": 1.0
+   },
+   "bernett/Intra1_neg_rr.txt": {
+    "pairs": 81596,
+    "resolved": 81596,
+    "share": 1.0
+   },
+   "bernett/Intra2_pos_rr.txt": {
+    "pairs": 26024,
+    "resolved": 26024,
+    "share": 1.0
+   },
+   "bernett/Intra2_neg_rr.txt": {
+    "pairs": 26024,
+    "resolved": 26024,
+    "share": 1.0
+   },
+   "tunar_gold/Intra0_interaction_1500_or_less.tsv": {
+    "pairs": 53665,
+    "resolved": 53665,
+    "share": 1.0
+   },
+   "tunar_gold/Intra1_interaction_1500_or_less.tsv": {
+    "pairs": 129592,
+    "resolved": 129592,
+    "share": 1.0
+   },
+   "tunar_gold/Intra2_interaction_1500_or_less.tsv": {
+    "pairs": 48266,
+    "resolved": 48266,
+    "share": 1.0
+   }
+  },
+  "pass": true
+ },
+ "G3": {
+  "O_T_distinct_proteins": 2560,
+  "U_T_distinct_proteins": 8320,
+  "positive_pairs": 10000,
+  "positive_distinct_proteins": 4797,
+  "O_sample_distinct_proteins": 2557,
+  "U_sample_distinct_proteins": 7526,
+  "pass": true
+ },
+ "descriptive_released_proteins": {
+  "scorable_proteins_seen_in_released_data": 8025,
+  "share_O_T_both_seen": 0.9247449833586573,
+  "share_U_T_both_seen": 0.9303808143041953,
+  "share_T_both_seen": 0.9299323300260904
+ },
+ "descriptive_string_400_700": {
+  "share_O_T": 0.00023342149446099573,
+  "share_U_T": 0.0015505211855322057,
+  "share_O_sample": 0.0007,
+  "share_U_sample": 0.0013
+ },
+ "sequences_written": 8228,
+ "G1_inputs": {
+  "tuna_rows": 300,
+  "dscript_cli_subset_pairs": 50,
+  "dscript_test_pairs": 52725
+ },
+ "seconds": 30.3
+}

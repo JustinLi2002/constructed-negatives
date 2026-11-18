@@ -1,0 +1,25 @@
+{
+ "tuna": {
+  "pairs": 300,
+  "pearson": 0.9999999999991926,
+  "max_abs_diff": 7.152557373046875e-07,
+  "mean_abs_diff": 1.3848145802815755e-07,
+  "pass": true
+ },
+ "dscript": {
+  "pairs_scored": 52725,
+  "positives": 4794,
+  "complete": true,
+  "auroc": 0.8538779806429257,
+  "auroc_reference": 0.833,
+  "auroc_tolerance": 0.05,
+  "average_precision": 0.6172801715628293,
+  "aupr_reference": 0.516,
+  "aupr_tolerance": 0.1,
+  "cli_pairs_compared": 50,
+  "cli_max_abs_diff": 5.7220458984375e-06,
+  "cli_tolerance": 0.001,
+  "pass": false
+ },
+ "pass": false
+}

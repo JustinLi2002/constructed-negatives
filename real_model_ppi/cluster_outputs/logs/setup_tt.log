@@ -1,0 +1,13 @@
+[2026-11-18 15:58:09] tt setup on <hpc-host>
+dscript_mouse/mouse_test.tsv: OK
+dscript_mouse/mouse.fasta: OK
+tt_weights/dscript_human_v2.pt: OK
+[2026-11-18 15:58:11] loadtest-tt
+[2026-11-18 15:58:21] smoke-test-tt-synthetic-sequences
+wrapper vs CLI ('toyA', 'toyB'): wrapper 0.00424385 cli 0.00424385 diff 0.00e+00
+wrapper vs CLI ('toyC', 'toyD'): wrapper 0.01672589 cli 0.01672589 diff 0.00e+00
+g1_tt rows 3
+SMOKE OK
+[2026-11-18 15:59:00] submit
+[2026-11-18 15:59:00] submitted job 4613624
+[2026-11-18 15:59:00] done

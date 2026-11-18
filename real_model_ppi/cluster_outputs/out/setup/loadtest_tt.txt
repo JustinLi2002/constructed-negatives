@@ -1,0 +1,26 @@
+{
+ "model": "Topsy-Turvy (dscript human_v2)",
+ "pt_sha256": "6b217a1b0399f6a0d72e4f4956d6f87bcf49aefb8ce37ed3636c8fe8a4731bf4",
+ "dscript": "0.3.1",
+ "torch": "2.7.1+cu126",
+ "python": "3.12.2",
+ "device": "cpu",
+ "gpu": null,
+ "cudnn_allow_tf32": false,
+ "matmul_allow_tf32": false,
+ "host": "<hpc-host>",
+ "model_built": {
+  "do_w": true,
+  "do_sigmoid": true,
+  "do_pool": true,
+  "pool_size": 9,
+  "use_cuda": false,
+  "theta": 1.0,
+  "lambda_": 0.0,
+  "gamma": 0.0,
+  "class": "dscript.models.interaction.ModelInteraction"
+ },
+ "state_dict_tensors": 21,
+ "state_dict_parameters": 631311,
+ "toy_forward_ok": true
+}

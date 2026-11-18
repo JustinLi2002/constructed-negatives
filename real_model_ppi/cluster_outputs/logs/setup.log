@@ -1,0 +1,203 @@
+[2026-11-18 09:44:49] start on <hpc-host>
+<storage-host>:<HOME_ROOT>  1.9T  927G  936G  50% <HOME_ROOT>
+<HPC_HOME>/realppi/scripts/setup.sh: line 17: quota: command not found
+[2026-11-18 09:44:49] uv
+uv 0.13.9 (x86_64-unknown-linux-gnu)
+[2026-11-18 09:45:18] tunar-code
+[2026-11-18 09:45:22] tuna-env
+Downloading cpython-3.13.18-linux-x86_64-gnu (download) (33.9MiB)
+ Downloaded cpython-3.13.18-linux-x86_64-gnu (download)
+Using CPython 3.13.18
+Creating virtual environment at: <HPC_HOME>/realppi/envs/tuna
+warning: Skipping installation of entry points (`project.scripts`) for package `tuna-r` because this project is not packaged; to install entry points, set `tool.uv.package = true` or define a `build-system`
+   Updating https://github.com/jlparkI/uncertaintyAwareDeepLearn (0.0.5)
+Downloading sympy (6.0MiB)
+Downloading pygments (1.2MiB)
+Downloading nvidia-nvjitlink-cu12 (18.8MiB)
+Downloading nvidia-cufft-cu12 (190.9MiB)
+Downloading nvidia-cufile-cu12 (1.1MiB)
+Downloading setuptools (1.1MiB)
+Downloading virtualenv (5.8MiB)
+Downloading scipy (34.0MiB)
+Downloading nvidia-cublas-cu12 (374.9MiB)
+Downloading nvidia-cuda-nvrtc-cu12 (22.6MiB)
+Downloading nvidia-cusparselt-cu12 (149.5MiB)
+Downloading wandb (22.1MiB)
+Downloading nvidia-cusparse-cu12 (206.5MiB)
+Downloading ruff (11.1MiB)
+Downloading aiohttp (1.6MiB)
+Downloading nvidia-curand-cu12 (53.7MiB)
+Downloading scikit-learn (9.0MiB)
+Downloading triton (148.5MiB)
+Downloading torch (783.0MiB)
+Downloading networkx (1.9MiB)
+Downloading pandas (10.4MiB)
+Downloading nvidia-cuda-cupti-cu12 (8.5MiB)
+Downloading hf-xet (3.2MiB)
+Downloading nvidia-cusolver-cu12 (150.9MiB)
+Downloading numpy (15.9MiB)
+Downloading pydantic-core (1.9MiB)
+Downloading nvidia-nccl-cu12 (192.0MiB)
+Downloading nvidia-cudnn-cu12 (544.5MiB)
+Downloading biopython (3.1MiB)
+ Downloaded nvidia-cufile-cu12
+   Building antlr4-python3-runtime==4.9.3
+   Building uncertainty-calibration==0.1.4
+ Downloaded aiohttp
+ Downloaded pygments
+ Downloaded pydantic-core
+ Downloaded hf-xet
+    Updated https://github.com/jlparkI/uncertaintyAwareDeepLearn (18565eb86026800817857e37243ae81f15f089d7)
+   Building uncertaintyawaredeeplearn @ git+https://github.com/jlparkI/uncertaintyAwareDeepLearn@18565eb86026800817857e37243ae81f15f089d7
+ Downloaded setuptools
+ Downloaded networkx
+ Downloaded biopython
+ Downloaded virtualenv
+ Downloaded nvidia-cuda-cupti-cu12
+ Downloaded scikit-learn
+ Downloaded ruff
+ Downloaded sympy
+ Downloaded numpy
+ Downloaded nvidia-nvjitlink-cu12
+ Downloaded nvidia-cuda-nvrtc-cu12
+      Built uncertaintyawaredeeplearn @ git+https://github.com/jlparkI/uncertaintyAwareDeepLearn@18565eb86026800817857e37243ae81f15f089d7
+      Built uncertainty-calibration==0.1.4
+ Downloaded pandas
+      Built antlr4-python3-runtime==4.9.3
+ Downloaded scipy
+ Downloaded wandb
+ Downloaded nvidia-curand-cu12
+ Downloaded nvidia-cusparselt-cu12
+ Downloaded nvidia-cusolver-cu12
+ Downloaded triton
+ Downloaded nvidia-cufft-cu12
+ Downloaded nvidia-nccl-cu12
+ Downloaded nvidia-cusparse-cu12
+ Downloaded nvidia-cublas-cu12
+ Downloaded nvidia-cudnn-cu12
+ Downloaded torch
+Prepared 98 packages in 1m 31s
+Installed 98 packages in 39.11s
+ + aiohappyeyeballs==2.6.1
+ + aiohttp==3.12.13
+ + aiosignal==1.3.2
+ + annotated-types==0.7.0
+ + antlr4-python3-runtime==4.9.3
+ + anyio==4.11.0
+ + attrs==25.3.0
+ + biopython==1.86
+ + certifi==2025.6.15
+ + cfgv==3.4.0
+ + charset-normalizer==3.4.2
+ + click==8.2.1
+ + distlib==0.3.9
+ + einops==0.8.1
+ + fair-esm==2.0.0
+ + filelock==3.18.0
+ + frozenlist==1.7.0
+ + fsspec==2025.5.1
+ + gitdb==4.0.12
+ + gitpython==3.1.44
+ + h11==0.16.0
+ + hf-xet==1.2.0
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + huggingface-hub==1.0.1
+ + hydra-core==1.3.2
+ + identify==2.6.12
+ + idna==3.10
+ + iniconfig==2.1.0
+ + isort==6.0.1
+ + jinja2==3.1.6
+ + joblib==1.5.2
+ + lightning==2.5.2
+ + lightning-utilities==0.14.3
+ + markupsafe==3.0.2
+ + mpmath==1.3.0
+ + multidict==6.6.2
+ + networkx==3.5
+ + nodeenv==1.9.1
+ + numpy==2.3.1
+ + nvidia-cublas-cu12==12.6.4.1
+ + nvidia-cuda-cupti-cu12==12.6.80
+ + nvidia-cuda-nvrtc-cu12==12.6.77
+ + nvidia-cuda-runtime-cu12==12.6.77
+ + nvidia-cudnn-cu12==9.5.1.17
+ + nvidia-cufft-cu12==11.3.0.4
+ + nvidia-cufile-cu12==1.11.1.6
+ + nvidia-curand-cu12==10.3.7.77
+ + nvidia-cusolver-cu12==11.7.1.2
+ + nvidia-cusparse-cu12==12.5.4.2
+ + nvidia-cusparselt-cu12==0.6.3
+ + nvidia-nccl-cu12==2.26.2
+ + nvidia-nvjitlink-cu12==12.6.85
+ + nvidia-nvtx-cu12==12.6.77
+ + omegaconf==2.3.0
+ + packaging==25.0
+ + pandas==3.0.2
+ + parameterized==0.9.0
+ + platformdirs==4.3.8
+ + pluggy==1.6.0
+ + pre-commit==4.2.0
+ + propcache==0.3.2
+ + protobuf==6.31.1
+ + psutil==7.0.0
+ + pydantic==2.11.7
+ + pydantic-core==2.33.2
+ + pygments==2.19.2
+ + pytest==8.4.1
+ + python-dateutil==2.9.0.post0
+ + pytorch-lightning==2.5.2
+ + pytorch-optimizer==3.7.0
+ + pyyaml==6.0.2
+ + requests==2.32.4
+ + ruff==0.12.2
+ + scikit-learn==1.7.2
+ + scipy==1.16.3
+ + sentry-sdk==2.30.0
+ + setproctitle==1.3.6
+ + setuptools==80.9.0
+ + shellingham==1.5.4
+ + six==1.17.0
+ + smmap==5.0.2
+ + sniffio==1.3.1
+ + sympy==1.14.0
+ + threadpoolctl==3.6.0
+ + torch==2.7.1
+ + torchmetrics==1.7.3
+ + tqdm==4.67.1
+ + triton==3.3.1
+ + typer-slim==0.20.0
+ + typing-extensions==4.14.0
+ + typing-inspection==0.4.1
+ + uncertainty-calibration==0.1.4
+ + uncertaintyawaredeeplearn==0.0.5 (from git+https://github.com/jlparkI/uncertaintyAwareDeepLearn@18565eb86026800817857e37243ae81f15f089d7)
+ + urllib3==2.5.0
+ + virtualenv==20.31.2
+ + wandb==0.20.1
+ + yarl==1.20.1
+Python 3.13.18
+[2026-11-18 09:48:03] dscript-env
+Using Python 3.13.18 environment at: <HPC_HOME>/realppi/envs/tuna
+Using Python 3.12.2 environment at: <HPC_HOME>/realppi/envs/dscript
+[2026-11-18 09:50:04] tunar-weights
+[2026-11-18 09:50:08] esm2-150M
+[2026-11-18 09:50:11] dscript-models
+package LM copied to <HPC_HOME>/realppi/envs/dscript/lib/python3.12/site-packages/dscript
+[2026-11-18 09:51:28] dscript-data
+dscript_data: https://raw.githubusercontent.com/samsledje/D-SCRIPT/23cbb0fbbb454d09ee41ff749c1454d8b3c8a4b8/data/pairs/human_train.tsv
+dscript_data: https://raw.githubusercontent.com/samsledje/D-SCRIPT/23cbb0fbbb454d09ee41ff749c1454d8b3c8a4b8/data/pairs/human_test.tsv
+dscript_data: https://raw.githubusercontent.com/samsledje/D-SCRIPT/23cbb0fbbb454d09ee41ff749c1454d8b3c8a4b8/data/seqs/human.fasta
+  human_train.tsv  18,558,848 bytes  sha256 a51caf0b590decf9
+  human_test.tsv  2,319,900 bytes  sha256 19498f9761e9cb56
+  human.fasta  30,928,643 bytes  sha256 ff027c405225204c
+human_train.tsv: OK
+human_test.tsv: OK
+human.fasta: OK
+[2026-11-18 09:51:30] checksums
+1.2G	<HPC_HOME>/realppi/downloads
+8.4G	<HPC_HOME>/realppi/envs
+241M	<HPC_HOME>/realppi/tools
+[2026-11-18 09:51:54] load-tests
+[2026-11-18 09:52:57] smoke-test-synthetic-sequences
+[2026-11-18 09:53:29] SETUP FAILED: command failed near line 110

@@ -1,0 +1,79 @@
+{
+ "model": "Topsy-Turvy (dscript human_v2)",
+ "pt_sha256": "6b217a1b0399f6a0d72e4f4956d6f87bcf49aefb8ce37ed3636c8fe8a4731bf4",
+ "dscript": "0.3.1",
+ "torch": "2.7.1+cu126",
+ "python": "3.12.2",
+ "device": "cpu",
+ "gpu": null,
+ "cudnn_allow_tf32": false,
+ "matmul_allow_tf32": false,
+ "host": "<hpc-host>",
+ "mode": "g1",
+ "pairs_file": "<HPC_HOME>/realppi/inputs_smoke/human_test.tsv",
+ "model_built": {
+  "do_w": true,
+  "do_sigmoid": true,
+  "do_pool": true,
+  "pool_size": 9,
+  "use_cuda": false,
+  "theta": 1.0,
+  "lambda_": 0.0,
+  "gamma": 0.0,
+  "class": "dscript.models.interaction.ModelInteraction"
+ },
+ "pairs": 3,
+ "unique_proteins": 6,
+ "seconds_embedding": 1.5,
+ "seconds_scoring": 0.0,
+ "finished": "2026-11-18 15:58:26"
+}
+2026-11-18 15:58:39.597 -05:00 | INFO     | dscript.utils:log:49 - # Using CPU
+2026-11-18 15:58:39.603 -05:00 | INFO     | dscript.utils:log:49 - # Loading Model...
+2026-11-18 15:58:40.239 -05:00 | INFO     | dscript.utils:log:49 - # Loading Sequences...
+  0%|          | 0/4 [00:00<?, ?it/s]100%|██████████| 4/4 [00:00<00:00, 29485.44it/s]
+2026-11-18 15:58:40.249 -05:00 | INFO     | dscript.utils:log:49 - # 4 Sequences Loaded
+2026-11-18 15:58:40.255 -05:00 | INFO     | dscript.utils:log:49 - # Approximate Storage Required (varies by average sequence length): ~0.032GB
+2026-11-18 15:58:40.261 -05:00 | INFO     | dscript.utils:log:49 - # Storing to <HPC_HOME>/realppi/work/cli_tt_20261118_155829/cli_subset.h5...
+  0%|          | 0/4 [00:00<?, ?it/s] 25%|██▌       | 1/4 [00:00<00:00,  3.36it/s] 50%|█████     | 2/4 [00:00<00:00,  3.70it/s] 75%|███████▌  | 3/4 [00:00<00:00,  2.97it/s]100%|██████████| 4/4 [00:01<00:00,  2.83it/s]100%|██████████| 4/4 [00:01<00:00,  2.98it/s]
+2026-11-18 15:58:47.971 -05:00 | INFO     | dscript.utils:log:49 - Using CPU
+2026-11-18 15:58:47.982 -05:00 | INFO     | dscript.utils:log:49 - Loading model from <HPC_HOME>/realppi/work/cli_tt_20261118_155829/tt_human_v2_whole_model.sav
+2026-11-18 15:58:48.002 -05:00 | INFO     | dscript.utils:log:49 - Loading pairs from <HPC_HOME>/realppi/inputs_smoke/cli_subset.tsv
+2026-11-18 15:58:48.024 -05:00 | INFO     | dscript.utils:log:49 - Loading Embeddings...
+Loading Embeddings:   0%|          | 0/4 [00:00<?, ?it/s]Loading Embeddings:  25%|██▌       | 1/4 [00:00<00:01,  2.27it/s]Loading Embeddings: 100%|██████████| 4/4 [00:00<00:00,  8.18it/s]
+2026-11-18 15:58:48.552 -05:00 | INFO     | dscript.utils:log:49 - Making Predictions...
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 19.29it/s]100%|██████████| 2/2 [00:00<00:00, 19.21it/s]
+{
+ "model": "Topsy-Turvy (dscript human_v2)",
+ "pt_sha256": "6b217a1b0399f6a0d72e4f4956d6f87bcf49aefb8ce37ed3636c8fe8a4731bf4",
+ "dscript": "0.3.1",
+ "torch": "2.7.1+cu126",
+ "python": "3.12.2",
+ "device": "cpu",
+ "gpu": null,
+ "cudnn_allow_tf32": false,
+ "matmul_allow_tf32": false,
+ "host": "<hpc-host>",
+ "mode": "main",
+ "model_built": {
+  "do_w": true,
+  "do_sigmoid": true,
+  "do_pool": true,
+  "pool_size": 9,
+  "use_cuda": false,
+  "theta": 1.0,
+  "lambda_": 0.0,
+  "gamma": 0.0,
+  "class": "dscript.models.interaction.ModelInteraction"
+ },
+ "pairs": 6,
+ "unique_proteins": 6,
+ "seconds_embedding": 4.6,
+ "seconds_scoring": 0.1,
+ "pairs_per_set": {
+  "positives": 2,
+  "O": 2,
+  "U": 2
+ },
+ "finished": "2026-11-18 15:59:00"
+}

@@ -1,0 +1,6 @@
+proteins 10746, edges 86519, tau 2
+degree histogram 1..5: {1: 1910, 2: 1315, 3: 822, 4: 715, 5: 502}
+non-edge pairs 57,646,366; eligible non-edges (O) 4,334,373; excluded (U) 53,311,993
+W (full non-edge target, uniform) = 0.9248
+proteins with >=1 eligible partner: 3225 of 10746
+positive edges with product <= tau: 372; median edge degree product 1869

@@ -1,0 +1,3 @@
+dscript_mouse/mouse_test.tsv: OK
+dscript_mouse/mouse.fasta: OK
+tt_weights/dscript_human_v2.pt: OK

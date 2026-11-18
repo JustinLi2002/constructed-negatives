@@ -1,0 +1,4 @@
+[2026-11-18 10:07:29] resume1 on <hpc-host>
+[2026-11-18 10:07:29] loadtest-dscript
+[2026-11-18 10:07:45] smoke-test-synthetic-sequences
+[2026-11-18 10:08:34] RESUME1 FAILED: command failed near line 30

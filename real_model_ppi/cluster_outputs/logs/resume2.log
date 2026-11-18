@@ -1,0 +1,9 @@
+[2026-11-18 10:14:50] resume2 on <hpc-host>
+[2026-11-18 10:14:50] smoke-test-synthetic-sequences
+wrapper vs CLI ('toyA', 'toyB'): wrapper 0.00417236 cli 0.00417236 diff 0.00e+00
+wrapper vs CLI ('toyC', 'toyD'): wrapper 0.00417436 cli 0.00417436 diff 0.00e+00
+g1_tuna rows 2, g1_dscript rows 3
+SMOKE OK
+[2026-11-18 10:16:00] submit
+[2026-11-18 10:16:00] submitted job 4598207
+[2026-11-18 10:16:00] done

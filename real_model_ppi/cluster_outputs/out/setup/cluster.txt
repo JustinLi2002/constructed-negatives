@@ -1,0 +1,11 @@
+NODELIST GRES STATE
+mantis-077 (null) drng
+mantis-037 (null) drain
+mantis-[001-005,023-030] gpu:A100:1 mix
+mantis-[006,008,010,012-016,019-022,051-057,059,061,064-074] (null) mix
+mantis-033 gpu:L40S:1 mix
+mantis-[034-036] gpu:L40S:3 mix
+mantis-[045-047,049] gpu:A10:1 mix
+mantis-[048,075] gpu:A10:1,gpu:M10:1 mix
+mantis-[007,009,011,017-018] (null) alloc
+mantis-[058,060,062-063] (null) idle

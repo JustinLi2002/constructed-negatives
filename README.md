@@ -106,6 +106,7 @@ positive graph is not supplied here.
 | `recsys_kcore_scope.py` | Five-core recommendation benchmarks: recomputes each Amazon Reviews 2023 five-core from the unfiltered release, checks it against the published one, and reports *W*, *d_min* and retained shares (`results_recsys_kcore.tsv`, ED Table 4) | Public 0-core and 5-core rating-only files (download separately); CPU, minutes |
 | `make_figures.py` | All six PNGs, including the depth profile (ED Fig. 3) recovered from the archived depth scan | Saved tables; seconds |
 | `verify_scope_review.py` | Numeric/provenance/Table 1 checks | Saved outputs; seconds |
+| `real_model_ppi/scripts/analyze.py`, `analyze_tt.py` | Released-predictor test, ED Table 5 (`real_model_ppi/results/analysis_4610895.json`, `analysis_tt_4613624.json`) | Saved per-pair scores; seconds |
 
 Full external-data runtimes have not been benchmarked consistently. A
 synthetic-sweep runtime should not be interpreted as a graph-processing time.
@@ -140,6 +141,15 @@ No prediction file supplies depth-zero negatives for a full-proteome claim.
 `threshold_tradeoff.py` imports `fn_sensitivity.py` from the first audit,
 archived at [Zenodo 21993819](https://doi.org/10.5281/zenodo.21993819). Retrieve
 that component before running the threshold analysis.
+
+## Released-predictor test
+
+`real_model_ppi/` holds the test with three released interaction predictors
+(TUnA-R, D-SCRIPT and Topsy-Turvy) on STRING ≥700: the dated design and its
+amendments, the target and samples, the cluster scripts, gate records, per-pair
+scores and the analyses behind Extended Data Table 5. `real_model_ppi/README.md`
+describes the layout and how to rerun each step. In that folder, personal paths,
+host names and account names were replaced by placeholders.
 
 ## Current versus historical results
 

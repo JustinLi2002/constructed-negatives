@@ -1,0 +1,144 @@
+{
+ "string_seqs": {
+  "fetched_utc": "2026-11-18T14:12:30Z",
+  "files": [
+   {
+    "url": "https://stringdb-downloads.org/download/protein.sequences.v12.0/9606.protein.sequences.v12.0.fa.gz",
+    "file": "9606.protein.sequences.v12.0.fa.gz",
+    "bytes": 6760990,
+    "sha256": "afe5ebc2d26777a930f947f350c01dc4261d6fa29dd3f217b22fc0225e066ee1"
+   }
+  ]
+ },
+ "dscript_data": {
+  "fetched_utc": "2026-11-18T14:12:33Z",
+  "files": [
+   {
+    "url": "https://raw.githubusercontent.com/samsledje/D-SCRIPT/23cbb0fbbb454d09ee41ff749c1454d8b3c8a4b8/data/pairs/human_train.tsv",
+    "file": "human_train.tsv",
+    "bytes": 18558848,
+    "sha256": "a51caf0b590decf96911b09d1e2cc6afc9a9d669d4e67d8bb3c2f1c94e16cd0b"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/samsledje/D-SCRIPT/23cbb0fbbb454d09ee41ff749c1454d8b3c8a4b8/data/pairs/human_test.tsv",
+    "file": "human_test.tsv",
+    "bytes": 2319900,
+    "sha256": "19498f9761e9cb5645799f9e4e36f18b3abe7d2b015bf50b4a78d53283fe8f53"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/samsledje/D-SCRIPT/23cbb0fbbb454d09ee41ff749c1454d8b3c8a4b8/data/seqs/human.fasta",
+    "file": "human.fasta",
+    "bytes": 30928643,
+    "sha256": "ff027c405225204c9c3469ee2aa6dee807253a00af96936f4776e3580319cb14"
+   }
+  ]
+ },
+ "bernett_tuna": {
+  "fetched_utc": "2026-11-18T14:12:37Z",
+  "files": [
+   {
+    "url": "https://raw.githubusercontent.com/Wang-lab-UCSD/TUnA/b5bda8fee261a4f27821738db995cf5883dcd133/data/raw/bernett/Intra0_pos_rr.txt",
+    "file": "Intra0_pos_rr.txt",
+    "bytes": 414828,
+    "sha256": "8d1ff603202a0a38f4dc3692807b1b052161e9db3016fe3cdbfe6e0945e03f34"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/Wang-lab-UCSD/TUnA/b5bda8fee261a4f27821738db995cf5883dcd133/data/raw/bernett/Intra0_neg_rr.txt",
+    "file": "Intra0_neg_rr.txt",
+    "bytes": 414832,
+    "sha256": "9e30fa1695b50f7692bcb0bcba2b922e950a90902093aa8bcec402eab6ee2473"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/Wang-lab-UCSD/TUnA/b5bda8fee261a4f27821738db995cf5883dcd133/data/raw/bernett/Intra1_pos_rr.txt",
+    "file": "Intra1_pos_rr.txt",
+    "bytes": 1142344,
+    "sha256": "04e0a34f4636d45cbf0b28edca5fdac746ef59dfa0e18c1b6eb962ea46721a61"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/Wang-lab-UCSD/TUnA/b5bda8fee261a4f27821738db995cf5883dcd133/data/raw/bernett/Intra1_neg_rr.txt",
+    "file": "Intra1_neg_rr.txt",
+    "bytes": 1142344,
+    "sha256": "8bf6544fc737c729a951921c9d62c9febb054910704c89b753c053b994fd8631"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/Wang-lab-UCSD/TUnA/b5bda8fee261a4f27821738db995cf5883dcd133/data/raw/bernett/Intra2_pos_rr.txt",
+    "file": "Intra2_pos_rr.txt",
+    "bytes": 364336,
+    "sha256": "5932f357c1b287467497c22370ea7e0e5074f312f8b73f631852b3c023239a0f"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/Wang-lab-UCSD/TUnA/b5bda8fee261a4f27821738db995cf5883dcd133/data/raw/bernett/Intra2_neg_rr.txt",
+    "file": "Intra2_neg_rr.txt",
+    "bytes": 364336,
+    "sha256": "0772009d9855c47103ebc57216d79a6936ce929a65bca7e768d8dc06996486a7"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/Wang-lab-UCSD/TUnA/b5bda8fee261a4f27821738db995cf5883dcd133/data/raw/bernett/human_swissprot_oneliner.fasta",
+    "file": "human_swissprot_oneliner.fasta",
+    "bytes": 11561571,
+    "sha256": "578b02750acb75416b897ee7de07f9f5a4f3a57ec7fbce4b4a62ec84a1851d0d"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/Wang-lab-UCSD/TUnA/b5bda8fee261a4f27821738db995cf5883dcd133/data/raw/bernett/README.md",
+    "file": "README.md",
+    "bytes": 1186,
+    "sha256": "ae380bd28f14ed4134097cef3da985ca1054078697304219f388de4f8f5af90b"
+   }
+  ]
+ },
+ "tunar_gold": {
+  "fetched_utc": "2026-11-18T14:12:39Z",
+  "files": [
+   {
+    "url": "https://raw.githubusercontent.com/young-su-ko/TUnA-R/104756851004a05ff4a27caf1c4c5f4a556cff7d/data/gold_standard/Intra0_interaction_1500_or_less.tsv",
+    "file": "Intra0_interaction_1500_or_less.tsv",
+    "bytes": 912321,
+    "sha256": "105f30b038800f5cf7e598fc9dc6e34ddaabfa9451e32a6edd69d6cc52687a1f"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/young-su-ko/TUnA-R/104756851004a05ff4a27caf1c4c5f4a556cff7d/data/gold_standard/Intra1_interaction_1500_or_less.tsv",
+    "file": "Intra1_interaction_1500_or_less.tsv",
+    "bytes": 2203064,
+    "sha256": "bec107f8e07cc603ff247a8626aa9a06369b73256848fb5ccbf42dc31f998a58"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/young-su-ko/TUnA-R/104756851004a05ff4a27caf1c4c5f4a556cff7d/data/gold_standard/Intra2_interaction_1500_or_less.tsv",
+    "file": "Intra2_interaction_1500_or_less.tsv",
+    "bytes": 820522,
+    "sha256": "e05367894e6ddafc9aa1120a6db3df8013a26e59e1be5330fa6dbc46ed6dbd09"
+   },
+   {
+    "url": "https://raw.githubusercontent.com/young-su-ko/TUnA-R/104756851004a05ff4a27caf1c4c5f4a556cff7d/data/gold_standard/human_swissprot_oneliner.fasta",
+    "file": "human_swissprot_oneliner.fasta",
+    "bytes": 11561571,
+    "sha256": "578b02750acb75416b897ee7de07f9f5a4f3a57ec7fbce4b4a62ec84a1851d0d"
+   }
+  ]
+ },
+ "snooppi_list": {
+  "fetched_utc": "2026-11-18T14:12:41Z",
+  "files": [
+   {
+    "url": "https://zenodo.org/api/records/22116351/files/snooppi_zenodo.zip/content",
+    "file": "zip_members.tsv",
+    "bytes": 83771,
+    "sha256": "7d3b4fe8f2be76c209527ad3edd8cab05b6099f7074bac4f31bfe7410d9d31c3",
+    "range_requests": 4
+   }
+  ]
+ },
+ "snooppi_positive": {
+  "fetched_utc": "2026-11-18T14:13:13Z",
+  "files": [
+   {
+    "url": "https://zenodo.org/api/records/22116351/files/snooppi_zenodo.zip/content",
+    "zip_member": "snooppi/interactome/data_files/processed/le1997_allNaturals_classifier_predictions_clean/snooppi_positive__all_models.parquet",
+    "file": "snooppi_positive__all_models.parquet",
+    "bytes": 17497044,
+    "crc32_checked": "07a8f3e9",
+    "sha256": "09e57dc5fd7829f54f505f01b96cb1eaadb637720049c75925e0f48315d93541",
+    "range_requests": 7
+   }
+  ]
+ }
+}

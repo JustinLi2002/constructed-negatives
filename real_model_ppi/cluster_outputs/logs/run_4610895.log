@@ -1,0 +1,113 @@
+[2026-11-18 13:13:53] job 4610895 on mantis-028
+NVIDIA A100 80GB PCIe, 81920 MiB, 570.86.15
+[2026-11-18 13:13:53] gate-a3
+{
+ "amendment": "DESIGN.md Amendment 3 (A16): one-sided lower limits for D-SCRIPT AUROC and AP",
+ "tuna": {
+  "pairs": 300,
+  "pearson": 0.9999999999991926,
+  "max_abs_diff": 7.152557373046875e-07,
+  "mean_abs_diff": 1.3848145802815755e-07,
+  "pass": true
+ },
+ "dscript": {
+  "pairs_scored": 52725,
+  "positives": 4794,
+  "complete": true,
+  "auroc": 0.8538779806429257,
+  "auroc_min": 0.7829999999999999,
+  "average_precision": 0.6172801715628293,
+  "ap_min": 0.41600000000000004,
+  "cli_pairs_compared": 50,
+  "cli_max_abs_diff": 5.7220458984375e-06,
+  "cli_tolerance": 0.001,
+  "pass": true
+ },
+ "pass": true
+}
+[2026-11-18 13:14:01] main-tuna
+  embedded 500/8149
+  embedded 1000/8149
+  embedded 1500/8149
+  embedded 2000/8149
+  embedded 2500/8149
+  embedded 3000/8149
+  embedded 3500/8149
+  embedded 4000/8149
+  embedded 4500/8149
+  embedded 5000/8149
+  embedded 5500/8149
+  embedded 6000/8149
+  embedded 6500/8149
+  embedded 7000/8149
+  embedded 7500/8149
+  embedded 8000/8149
+  embedded 8149/8149
+{
+ "model": "TUnA-R",
+ "checkpoint_sha256": "6756d40bb36c5f642014abc946200c56b64dd26feea5d0aebb6e515e5885e0bb",
+ "code_commit": "104756851004a05ff4a27caf1c4c5f4a556cff7d",
+ "torch": "2.7.1+cu126",
+ "python": "3.13.18",
+ "device": "cuda",
+ "gpu": "NVIDIA A100 80GB PCIe",
+ "cudnn_allow_tf32": true,
+ "matmul_allow_tf32": false,
+ "embed_batch_size": 1,
+ "host": "mantis-028",
+ "mode": "main",
+ "pairs": 30000,
+ "unique_sequences": 8149,
+ "seconds_embedding": 213.9,
+ "seconds_scoring": 155.3,
+ "pairs_per_set": {
+  "positives": 10000,
+  "O": 10000,
+  "U": 10000
+ },
+ "finished": "2026-11-18 13:20:25"
+}
+[2026-11-18 13:20:27] main-dscript
+  embedded 1000/8228
+  embedded 2000/8228
+  embedded 3000/8228
+  embedded 4000/8228
+  embedded 5000/8228
+  embedded 6000/8228
+  embedded 7000/8228
+  embedded 8000/8228
+{
+ "model": "D-SCRIPT human_v1",
+ "sav_sha256": "1d6b8d458a4c2d481573527541cfa8162cc8eadf9e6db23147074ce30184de38",
+ "dscript": "0.3.1",
+ "torch": "2.7.1+cu126",
+ "python": "3.12.2",
+ "device": "cuda",
+ "gpu": "NVIDIA A100 80GB PCIe",
+ "cudnn_allow_tf32": false,
+ "matmul_allow_tf32": false,
+ "host": "mantis-028",
+ "mode": "main",
+ "pickled_model": {
+  "do_w": true,
+  "do_sigmoid": true,
+  "do_pool": true,
+  "pool_size": null,
+  "use_cuda": true,
+  "theta": 1.0,
+  "lambda_": 0.0,
+  "gamma": 0.0,
+  "class": "dscript.models.interaction.ModelInteraction"
+ },
+ "pairs": 30000,
+ "unique_proteins": 8228,
+ "seconds_embedding": 258.2,
+ "seconds_scoring": 119.6,
+ "pairs_per_set": {
+  "positives": 10000,
+  "O": 10000,
+  "U": 10000
+ },
+ "finished": "2026-11-18 13:26:55"
+}
+[2026-11-18 13:26:56] done

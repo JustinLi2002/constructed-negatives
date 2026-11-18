@@ -1,0 +1,29 @@
+{
+ "model": "D-SCRIPT human_v1",
+ "sav_sha256": "1d6b8d458a4c2d481573527541cfa8162cc8eadf9e6db23147074ce30184de38",
+ "dscript": "0.3.1",
+ "torch": "2.7.1+cu126",
+ "python": "3.12.2",
+ "device": "cuda",
+ "gpu": "NVIDIA A100 80GB PCIe",
+ "cudnn_allow_tf32": false,
+ "matmul_allow_tf32": false,
+ "host": "mantis-027",
+ "mode": "g1",
+ "pickled_model": {
+  "do_w": true,
+  "do_sigmoid": true,
+  "do_pool": true,
+  "pool_size": null,
+  "use_cuda": true,
+  "theta": 1.0,
+  "lambda_": 0.0,
+  "gamma": 0.0,
+  "class": "dscript.models.interaction.ModelInteraction"
+ },
+ "pairs": 52725,
+ "unique_proteins": 15525,
+ "seconds_embedding": 458.8,
+ "seconds_scoring": 219.5,
+ "finished": "2026-11-18 10:28:24"
+}

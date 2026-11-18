@@ -1,0 +1,24 @@
+{
+ "model": "TUnA-R",
+ "checkpoint_sha256": "6756d40bb36c5f642014abc946200c56b64dd26feea5d0aebb6e515e5885e0bb",
+ "code_commit": "104756851004a05ff4a27caf1c4c5f4a556cff7d",
+ "torch": "2.7.1+cu126",
+ "python": "3.13.18",
+ "device": "cuda",
+ "gpu": "NVIDIA A100 80GB PCIe",
+ "cudnn_allow_tf32": true,
+ "matmul_allow_tf32": false,
+ "embed_batch_size": 1,
+ "host": "mantis-028",
+ "mode": "main",
+ "pairs": 30000,
+ "unique_sequences": 8149,
+ "seconds_embedding": 213.9,
+ "seconds_scoring": 155.3,
+ "pairs_per_set": {
+  "positives": 10000,
+  "O": 10000,
+  "U": 10000
+ },
+ "finished": "2026-11-18 13:20:25"
+}

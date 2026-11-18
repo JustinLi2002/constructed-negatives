@@ -1,0 +1,5 @@
+*.sh text eol=lf
+*.sbatch text eol=lf
+results/** -text
+cluster_outputs/** -text
+smoke_inputs/** -text

@@ -1,0 +1,19 @@
+{
+ "amendment": "DESIGN.md Amendment 4 (A21)",
+ "tt": {
+  "pairs_scored": 55000,
+  "positives": 5000,
+  "complete": true,
+  "auroc": 0.8849765780000001,
+  "auroc_reference": 0.934,
+  "auroc_min": 0.884,
+  "average_precision": 0.6356887900700674,
+  "aupr_reference": 0.735,
+  "ap_min": 0.635,
+  "cli_pairs_compared": 50,
+  "cli_max_abs_diff": 3.6656856536865234e-06,
+  "cli_tolerance": 0.001,
+  "pass": true
+ },
+ "pass": true
+}

@@ -1,0 +1,30 @@
+{
+ "model": "Topsy-Turvy (dscript human_v2)",
+ "pt_sha256": "6b217a1b0399f6a0d72e4f4956d6f87bcf49aefb8ce37ed3636c8fe8a4731bf4",
+ "dscript": "0.3.1",
+ "torch": "2.7.1+cu126",
+ "python": "3.12.2",
+ "device": "cuda",
+ "gpu": "NVIDIA A100 80GB PCIe",
+ "cudnn_allow_tf32": false,
+ "matmul_allow_tf32": false,
+ "host": "mantis-029",
+ "mode": "g1",
+ "pairs_file": "<HPC_HOME>/realppi/downloads/dscript_mouse/mouse_test.tsv",
+ "model_built": {
+  "do_w": true,
+  "do_sigmoid": true,
+  "do_pool": true,
+  "pool_size": 9,
+  "use_cuda": true,
+  "theta": 1.0,
+  "lambda_": 0.0,
+  "gamma": 0.0,
+  "class": "dscript.models.interaction.ModelInteraction"
+ },
+ "pairs": 55000,
+ "unique_proteins": 37497,
+ "seconds_embedding": 1172.2,
+ "seconds_scoring": 229.6,
+ "finished": "2026-11-18 16:23:00"
+}

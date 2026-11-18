@@ -1,0 +1,42 @@
+{
+ "model": "D-SCRIPT human_v1",
+ "sav_sha256": "1d6b8d458a4c2d481573527541cfa8162cc8eadf9e6db23147074ce30184de38",
+ "dscript": "0.3.1",
+ "torch": "2.7.1+cu126",
+ "python": "3.12.2",
+ "device": "cpu",
+ "gpu": "NVIDIA A100 80GB PCIe",
+ "cudnn_allow_tf32": false,
+ "matmul_allow_tf32": false,
+ "host": "mantis-027",
+ "mode": "cli",
+ "commands": [
+  [
+   "<HPC_HOME>/realppi/envs/dscript/bin/dscript",
+   "embed",
+   "--seqs",
+   "<HPC_HOME>/realppi/out/g1_dscript/cli_subset.fasta",
+   "-o",
+   "<HPC_HOME>/realppi/work/cli_h5_20261118_102828/cli_subset.h5",
+   "--device=-1"
+  ],
+  [
+   "<HPC_HOME>/realppi/envs/dscript/bin/dscript",
+   "predict_serial",
+   "--pairs",
+   "<HPC_HOME>/realppi/inputs/g1_dscript_cli_subset.tsv",
+   "--embeddings",
+   "<HPC_HOME>/realppi/work/cli_h5_20261118_102828/cli_subset.h5",
+   "--model",
+   "<HPC_HOME>/realppi/downloads/dscript_models/human_v1.sav",
+   "--device=-1",
+   "--load_proc",
+   "1",
+   "-o",
+   "<HPC_HOME>/realppi/out/g1_dscript/cli_check"
+  ]
+ ],
+ "pairs": 50,
+ "h5": "<HPC_HOME>/realppi/work/cli_h5_20261118_102828/cli_subset.h5",
+ "seconds": 69.4
+}
